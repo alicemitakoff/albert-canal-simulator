@@ -270,8 +270,8 @@ const h2=(h)=>{ const m=Math.round(h*60); return m<60?m+' min':Math.floor(m/60)+
 function toast(s,ms=3200){ const t=document.getElementById('toast'); t.textContent=s; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),ms); }
 
 // ---------- map ----------
-const ESRI=()=>L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:12,attribution:'Esri World Imagery'});
-const ORTHO=()=>L.tileLayer('https://geo.api.vlaanderen.be/OMZ/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=omzrgb24vl&STYLE=&TILEMATRIXSET=GoogleMapsVL&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',{minZoom:13,maxZoom:20,maxNativeZoom:19,attribution:'Orthophoto summer 2024 © Digitaal Vlaanderen'});
+const ESRI=()=>L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:20,maxNativeZoom:18,attribution:'Esri World Imagery'});
+const ORTHO=()=>L.tileLayer('https://geo.api.vlaanderen.be/OMZ/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=omzrgb24vl&STYLE=&TILEMATRIXSET=GoogleMapsVL&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',{minZoom:13,maxZoom:20,maxNativeZoom:19,keepBuffer:4,updateWhenIdle:false,attribution:'Orthophoto summer 2024 © Digitaal Vlaanderen'});
 const OSM=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'});
 const LABELS=()=>L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:20,subdomains:'abcd',attribution:'labels © CARTO',opacity:.9,pane:'labelsPane'});
 function makeMap(el){
