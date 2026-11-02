@@ -125,7 +125,8 @@ body.split #title .brand{margin:0}
 .btn{background:var(--brass-soft);border:1px solid rgba(124,200,255,.35);border-radius:9px;padding:8px 12px;font-size:13px}
 .btn.primary{background:var(--brass);color:#07213a;font-weight:700;border-color:var(--brass)}
 .btn.ghost{background:none;border-color:var(--hair-cool)}
-.btn.on{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset;color:var(--ivory)}
+.btn.on{background:var(--brass);color:#07213a;font-weight:700;border-color:var(--brass)}
+#fleet .btn{padding:10px 0;font-size:15px;text-align:center;white-space:nowrap}
 .btn:disabled{opacity:.45;cursor:default}
 .vlist{display:grid;gap:6px;margin:4px 0}
 .picker{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 6px}
@@ -277,8 +278,8 @@ body.phone-mode #scene{display:none}
         <div class="faint">Add up to four. The screen splits as vessels join.</div>
         <label class="row" style="margin-top:8px"><input type="checkbox" id="showLive" checked style="width:auto;flex:0"> <span>Show the real vessels on the canal (live AIS)</span></label>
         <div class="eyebrow">Or start a fleet on this screen</div>
-        <div class="muted">No phones to hand? Pick how many vessels play. One fills the screen, four split it into quadrants. Each gets its own name, cargo, route and departure.</div>
-        <div class="row" id="fleet"><button class="btn" data-n="1">1 vessel</button><button class="btn" data-n="2">2 vessels</button><button class="btn" data-n="3">3 vessels</button><button class="btn on" data-n="4">4 vessels</button></div>
+        <div class="muted">No phones to hand? Choose how many vessels play, then OK. One fills the screen, four split it into quadrants.</div>
+        <div class="row" id="fleet"><button class="btn" data-n="1">1</button><button class="btn" data-n="2">2</button><button class="btn" data-n="3">3</button><button class="btn on" data-n="4">4</button></div>
         <div class="row"><button class="btn primary" id="fleetGo">OK, start the fleet</button></div>
         <div class="eyebrow">Play from your phone</div>
         <div class="muted">Each seat has its own code. Scan it, set up your vessel on the phone and watch it on this screen.</div>
