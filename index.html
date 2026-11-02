@@ -223,7 +223,7 @@ body.phone-mode #scene{display:none}
   <div id="title" class="panel">
     <h1>Albert Canal corridor</h1>
     <div class="sub">Antwerp to BCTN Meerhout, the 70 km the e-barge works. Real vessels, real locks and bridges, and a seat at the helm.</div>
-    <div class="brand"><span>Digital twin powered by</span><img src="assets/brand/natpower-digital-white.svg" alt="NatPower Digital"><span>·</span><img src="assets/brand/cma-cgm.svg" alt="CMA CGM" style="height:13px"></div>
+    <div class="brand"><span>Digital twin powered by</span><img src="assets/brand/natpower-digital-white.svg" alt="NatPower Digital"><span>·</span><img src="assets/brand/cma-cgm.svg" alt="CMA CGM" style="height:14px;filter:brightness(0) invert(1)"></div>
   </div>
   <div id="clock" class="panel"><span class="t" id="clockT">00:00</span><span id="clockD" class="muted">Day 1</span><button id="spd1" class="on">1×</button><button id="spd2">10×</button><button id="spd3">60×</button><button id="pause">Pause</button></div>
   <div id="side" class="panel">
@@ -239,12 +239,15 @@ body.phone-mode #scene{display:none}
       <div class="sec on" id="sec-play">
         <div class="eyebrow">1 · Pick your vessel</div>
         <div class="picker" id="picker"></div>
+        <div class="row"><select id="pReal"><option value="">Or take a real vessel from the live feed…</option></select></div>
+        <div class="faint" id="pRealNote"></div>
         <div class="eyebrow">2 · Route and departure</div>
         <div class="row"><select id="pFrom"></select><select id="pTo"></select></div>
         <div class="row"><select id="pStart"><option value="5">Leave 05:00</option><option value="7" selected>Leave 07:00</option><option value="11">Leave 11:00</option><option value="15">Leave 15:00</option><option value="21">Leave 21:00</option></select><select id="pSwap"><option value="hub">Swap at the hub (1)</option><option value="call" selected>Swap at the berth (2)</option><option value="pass">Tender at the lock (3)</option><option value="none">No swap</option></select></div>
         <input type="hidden" id="pName"><input type="hidden" id="pTeu" value="150">
         <div class="row"><button class="btn primary" id="pAdd">OK, set sail</button><button class="btn ghost" id="pClear">Clear canal</button></div>
         <div class="faint">Add up to four. The screen splits as vessels join.</div>
+        <label class="row" style="margin-top:8px"><input type="checkbox" id="showLive" checked style="width:auto;flex:0"> <span>Show the real vessels on the canal (live AIS)</span></label>
         <div class="eyebrow">Or start a fleet on this screen</div>
         <div class="muted">No phones to hand? Pick how many vessels play. One fills the screen, four split it into quadrants. Each gets its own name, cargo, route and departure.</div>
         <div class="row" id="fleet"><button class="btn" data-n="1">1 vessel</button><button class="btn" data-n="2">2 vessels</button><button class="btn" data-n="3">3 vessels</button><button class="btn on" data-n="4">4 vessels</button></div>
@@ -317,7 +320,7 @@ function makeMap(el){
   L.polyline(C.canal.map(p=>[p[1],p[0]]),{color:'#0b3a5e',weight:9,opacity:.55,lineCap:'round'}).addTo(m);
   m._canal=L.polyline(C.canal.map(p=>[p[1],p[0]]),{color:'#5bb8e6',weight:3.5,opacity:.95,lineCap:'round'}).addTo(m);
   // shared groups: Leaflet layers can only be on one map, so clone per map
-  m._g={}; for(const k in layers){ m._g[k]=L.layerGroup().addTo(m); }
+  m._g={}; for(const k in layers){ m._g[k]=L.layerGroup().addTo(m); } const sl=document.getElementById('showLive'); if(sl&&!sl.checked)m.removeLayer(m._g.live);
   drawStatic(m); return m;
 }
 function drawStatic(m){
@@ -344,7 +347,7 @@ function matchModel(sh){ const t=sh.type==null?0:sh.type, L=sh.len||0, name=(sh.
   else { id=!L?'10':L>=180?'04':L>=120?'06':L>=70?'10':L>=30?'11':'09'; }
   const m=MODELS[id]; const scale=L?L/m.len:1; const why=(sh.type!=null&&sh.type!==0?'AIS type '+sh.type+', '+aisTypeName(sh.type):'no type in its AIS yet, so the typical canal barge')+(L?' · '+L+' × '+(sh.beam||'?')+' m':'');
   return {id,name:m.name,len:m.len,scale,why,fit:Math.max(0,Math.min(1,1-Math.abs(Math.log(scale||1))))}; }
-function shipTopIcon(sh,hdg,m){ const mm=matchModel(sh); const z=m.getZoom(); const mpp=40075016.686*Math.cos(sh.lat*Math.PI/180)/Math.pow(2,z+8); const Lpx=Math.max(14,Math.min(260,(sh.len||mm.len*mm.scale||60)/mpp)); const Wpx=Lpx*((sh.beam||MODELS[mm.id].beam*mm.scale)/(sh.len||MODELS[mm.id].len*mm.scale)||0.14);
+function shipTopIcon(sh,hdg,m){ const mm=sh._m?{id:sh._m,len:MODELS[sh._m].len,scale:(sh.len||MODELS[sh._m].len)/MODELS[sh._m].len}:matchModel(sh); const z=m.getZoom(); const mpp=40075016.686*Math.cos(sh.lat*Math.PI/180)/Math.pow(2,z+8); const Lpx=Math.max(14,Math.min(260,(sh.len||mm.len*mm.scale||60)/mpp)); const Wpx=Lpx*((sh.beam||MODELS[mm.id].beam*mm.scale)/(sh.len||MODELS[mm.id].len*mm.scale)||0.14);
   return L.divIcon({className:'shiptop',html:`<div style="width:${Wpx}px;height:${Lpx}px;margin:${-Lpx/2}px 0 0 ${-Wpx/2}px;transform:rotate(${hdg}deg);transform-origin:50% 50%;background:url(assets/ships/${mm.id}_top.png) center/100% 100% no-repeat;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))"></div>`,iconSize:[0,0]}); }
 
 // ---------- live vessels ----------
@@ -354,7 +357,7 @@ async function loadLive(){
     const r=await fetch(LIVE+'ships.json?t='+Date.now(),{cache:'no-store'}); const j=await r.json();
     ships=j.ships.map(s=>Object.assign({},s,project(s.lon,s.lat))).filter(s=>s.d<350&&s.km>=0&&s.km<=KM_END+3);
     document.getElementById('liveMeta').textContent=`${ships.length} vessels on the corridor · feed updated ${fmtT(j.updated)} Brussels time`;
-    await loadHistory(); rankVessels(); drawLive(); renderList(); if(selected)selectVessel(selected,true);
+    await loadHistory(); rankVessels(); drawLive(); renderList(); renderRealPick(); if(selected)selectVessel(selected,true);
   }catch(e){ document.getElementById('liveMeta').textContent='The live feed is not reachable right now.'; }
 }
 async function loadHistory(){
@@ -456,25 +459,28 @@ const PLACES=[{id:'antwerp',name:'Antwerp (Deurganckdok gate)',km:0},{id:'wijneg
 let players=[], simT=null, simSpeed=1, running=true, lastTick=0, dayStart=null;
 const VESSELS=[{name:'Albatros',teu:150,swap:'hub',tag:'scenario 1 · swap at the hub'},{name:'Canal Dream',teu:208,swap:'call',tag:'scenario 2 · swap at the berth'},{name:'Meerhout Express',teu:96,swap:'pass',tag:'scenario 3 · tender at the lock'},{name:'Blue Pack',teu:342,swap:'call',tag:'scenario 2 · swap at the berth'}];
 let picked_v=0;
+let realPick=null;
+function renderRealPick(){ const sel=document.getElementById('pReal'); if(!sel)return; const cur=sel.value; sel.innerHTML='<option value="">Or take a real vessel from the live feed…</option>'+ships.filter(x=>x.name&&x.km>0.3&&(!x.len||x.len>=38)&&!/TUG|PILOT|LOODS/.test(x.name)).sort((a,b)=>a.km-b.km).map(x=>`<option value="${x.mmsi}">${x.name} · km ${x.km.toFixed(1)}${x.len?' · '+x.len+' m':''} · ${matchModel(x).name}</option>`).join(''); sel.value=cur; }
 function renderPicker(){ const box=document.getElementById('picker'); if(!box)return; box.innerHTML=VESSELS.map((v,i)=>{ const taken=players.some(p=>p.id===i); return `<div class="pick ${i===picked_v?'on':''} ${taken?'taken':''}" data-i="${i}">${bargeSvg(i,[100,100],16,50)}<div><b>${v.name}</b><small>${v.teu} TEU · ${v.tag}</small></div></div>`; }).join('');
-  box.querySelectorAll('.pick').forEach(e=>e.onclick=()=>{ if(e.classList.contains('taken'))return; picked_v=+e.dataset.i; const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; document.getElementById('pSwap').value=v.swap; renderPicker(); }); const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; }
+  box.querySelectorAll('.pick').forEach(e=>e.onclick=()=>{ if(e.classList.contains('taken'))return; realPick=null; const rs=document.getElementById('pReal'); if(rs)rs.value=''; document.getElementById('pRealNote').textContent=''; picked_v=+e.dataset.i; const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; document.getElementById('pSwap').value=v.swap; renderPicker(); }); const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; }
 function fillPlaces(){ renderPicker(); for(const id of ['pFrom','pTo']){ const s=document.getElementById(id); s.innerHTML=PLACES.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); } document.getElementById('pTo').value='meerhout'; const free=VESSELS.findIndex((v,i)=>!players.some(p=>p.id===i)); if(free>=0&&players.some(p=>p.id===picked_v)){ picked_v=free; renderPicker(); } }
 function congestion(hourOfDay,km){ // lock queue in hours by time of day: Asif's example, 11:00 adds an hour, 07:00 saves one
   const base=hourOfDay>=10&&hourOfDay<16?1.0:hourOfDay>=6&&hourOfDay<9?0.1:hourOfDay>=20||hourOfDay<5?0.3:0.5; return base; }
 function addPlayer(){
-  if(players.some(p=>p.id===picked_v)){ toast('That vessel is already on the canal. Pick another one.'); return; }
-  const cfg={from:document.getElementById('pFrom').value,to:document.getElementById('pTo').value,teu:+document.getElementById('pTeu').value,startH:+document.getElementById('pStart').value,swapPlan:document.getElementById('pSwap').value,name:document.getElementById('pName').value.trim(),vid:picked_v};
+  if(!realPick&&players.some(p=>p.id===picked_v)){ toast('That vessel is already on the canal. Pick another one.'); return; }
+  const cfg={from:document.getElementById('pFrom').value,to:document.getElementById('pTo').value,teu:+document.getElementById('pTeu').value,startH:+document.getElementById('pStart').value,swapPlan:document.getElementById('pSwap').value,name:document.getElementById('pName').value.trim(),vid:realPick?null:picked_v};
+  if(realPick){ cfg.real={mmsi:realPick.mmsi,km:realPick.km,model:matchModel(realPick).id,len:realPick.len||90,beam:realPick.beam||11}; cfg.from='real'; cfg.name=realPick.name; }
   addPlayerCfg(cfg,null);
 }
 function addPlayerCfg(cfg,seat){
   if(seat!=null){ const old=players.find(x=>x.seat===seat); if(old)players.splice(players.indexOf(old),1); }
   if(players.length>=4){ toast('Four vessels on the canal is the limit; clear the canal to start again.'); return false; }
-  const from=PLACES.find(p=>p.id===cfg.from)||PLACES[0], to=PLACES.find(p=>p.id===cfg.to)||PLACES[3];
+  const from=cfg.real?{id:'real',name:cfg.name+' now (km '+cfg.real.km.toFixed(1)+')',km:cfg.real.km}:(PLACES.find(p=>p.id===cfg.from)||PLACES[0]), to=PLACES.find(p=>p.id===cfg.to)||PLACES[3];
   if(from.id===to.id){ toast('Pick two different places.'); return false; }
   const teu=+cfg.teu||150, startH=+cfg.startH||7, swapPlan=cfg.swapPlan||'call';
   const name=(cfg.name||'').trim().slice(0,18)||('Vessel '+(players.length+1));
   if(!dayStart){ dayStart=new Date(); dayStart.setHours(0,0,0,0); simT=dayStart.getTime()+Math.min(startH,24)*36e5; }
-  const p={id:(cfg.vid!=null?cfg.vid:seat!=null?seat-1:players.length),seat,name,from,to,teu,startH,swapPlan,km:from.km,dir:Math.sign(to.km-from.km),v:teu>=300?8:teu>=200?9:10,kwhKm:KWH_PER_KM[teu]||60,
+  const p={id:(cfg.vid!=null?cfg.vid:seat!=null?seat-1:players.length),real:cfg.real||null,seat,name,from,to,teu,startH,swapPlan,km:from.km,dir:Math.sign(to.km-from.km),v:teu>=300?8:teu>=200?9:10,kwhKm:KWH_PER_KM[teu]||60,
     startT:dayStart.getTime()+startH*36e5,state:'wait',stateUntil:0,log:[],energy:0,packs:[100,100],hoursLost:0,locksDone:[],swapped:false,done:false,stopsLeft:Math.random()<0.6?1:2,nextStopKm:null,color:['green','amber','red','green'][players.length]};
   p.nextStopKm=from.km+p.dir*(5+Math.random()*(Math.abs(to.km-from.km)-10));
   if(simT>p.startT)simT=Math.min(simT,p.startT);
@@ -514,6 +520,7 @@ function stopDisplayKm(p){ if(p.state==='wait'||(p.stop&&p.stop.kind==='port')){
 function stepGame(dtH){
   for(const p of players){ if(p.done)continue;
     if(simT<p.startT){ p.state='wait'; continue; }
+    if(p.state==='wait'&&p.real){ p.state='sail'; p.log.push([simT,`${p.name} takes over from its real position at km ${p.real.km.toFixed(1)}`]); continue; }
     if(p.state==='wait'){ p.state='hold'; p.stateUntil=simT+40*60e3; startStop(p,'port',p.from.name.split(' (')[0]+', loading'); p.log.push([simT,`At ${p.from.name.split(' (')[0]}: ${p.teu} TEU loaded, leaves at ${fmtT(p.stateUntil)}`]); continue; }
     if(p.state==='hold'){ if(simT>=p.stateUntil){ p.state='sail'; p.stop=null; for(const m of maps)if(!m._userMoved)m.setZoom(13); } continue; }
     const kmBefore=p.km; let move=p.v*dtH; p.km+=p.dir*move; p.energy+=move*p.kwhKm; p.kwhTotal=(p.kwhTotal||0)+move*p.kwhKm;
@@ -542,7 +549,7 @@ function finish(p){ p.done=true; p.state='done'; p.endT=simT; p.rank=players.fil
 function drawGame(){
   for(const m of maps)m._g.game.clearLayers();
   players.forEach((p,i)=>{ const ll=llAt(stopDisplayKm(p)); const hdg=(bearingAt(p.km)+(p.dir<0?180:0))%360;
-    for(const m of maps){ const z=m.getZoom(); if(p.state==='sail')L.marker([ll[1],ll[0]],{icon:wakeIcon(hdg,z),interactive:false,zIndexOffset:800}).addTo(m._g.game); const mk=L.marker([ll[1],ll[0]],{icon:bargeIcon(p.id,p.packs,hdg,z),zIndexOffset:900}).addTo(m._g.game); mk.bindTooltip(`<b>${p.name}</b> · ${p.teu} TEU · km ${p.km.toFixed(1)}<br>${p.state==='hold'?'holding':p.state==='wait'?'waiting to leave':p.state==='done'?'arrived':'under way'} · packs ${p.packs[0]}% / ${p.packs[1]}%`,{permanent:true,direction:'right',offset:[22,0]}); }
+    for(const m of maps){ const z=m.getZoom(); if(p.state==='sail')L.marker([ll[1],ll[0]],{icon:wakeIcon(hdg,z),interactive:false,zIndexOffset:800}).addTo(m._g.game); const mk=L.marker([ll[1],ll[0]],{icon:p.real?shipTopIcon({lat:ll[1],len:p.real.len,beam:p.real.beam,type:0,name:p.name,_m:p.real.model},hdg,m):bargeIcon(p.id,p.packs,hdg,z),zIndexOffset:900}).addTo(m._g.game); mk.bindTooltip(`<b>${p.name}</b> · ${p.teu} TEU · km ${p.km.toFixed(1)}<br>${p.state==='hold'?'holding':p.state==='wait'?'waiting to leave':p.state==='done'?'arrived':'under way'} · packs ${p.packs[0]}% / ${p.packs[1]}%`,{permanent:true,direction:'right',offset:[22,0]}); }
     const m=maps[Math.min(i,maps.length-1)]; if(maps.length>1||players.length===1){ const tag=m.getContainer().querySelector('.tag'); if(tag)tag.innerHTML=`<b>${p.name}</b> · ${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]}`; if(!m._userMoved&&!(p.stop&&p.state==='hold')){ const z=m.getZoom()<12?13:m.getZoom(); const pt=m.project([ll[1],ll[0]],z).add(L.point(maps.length===1?190:0,30)); m.setView(m.unproject(pt,z),z,{animate:true,duration:.8}); } renderStop(m,p); renderReport(m,p); } });
 }
 function renderReport(m,p){
@@ -648,11 +655,12 @@ async function boot(){
   document.querySelectorAll('.tabs button[data-t]').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.tabs button[data-t]').forEach(x=>x.classList.toggle('on',x===b)); document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='sec-'+b.dataset.t)); document.getElementById('side').classList.remove('fold'); });
   document.getElementById('foldBtn').onclick=()=>{ const s=document.getElementById('side'); s.classList.toggle('fold'); document.getElementById('foldBtn').textContent=s.classList.contains('fold')?'▴':'▾'; };
   for(const [id,key] of [['lyBridges','bridges'],['lyLocks','locks'],['lyTerm','terms'],['lyLabels','labels']]){ document.getElementById(id).onchange=e=>{ for(const m of maps){ e.target.checked?m._g[key].addTo(m):m.removeLayer(m._g[key]);  } }; }
-  document.getElementById('lyAll').onchange=drawLive;
+  document.getElementById('lyAll').onchange=drawLive; document.getElementById('showLive').onchange=e=>{ for(const m of maps){ e.target.checked?m._g.live.addTo(m):m.removeLayer(m._g.live); } };
   document.getElementById('bOrtho').onclick=()=>{ for(const m of maps){ m.removeLayer(m._base); m._base=ORTHO().addTo(m); m._far=ESRI().addTo(m); m._far.bringToBack(); m._base.bringToBack(); } };
   document.getElementById('bOsm').onclick=()=>{ for(const m of maps){ m.removeLayer(m._base); m.removeLayer(m._far); m._base=OSM().addTo(m); m._base.bringToBack(); } };
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ const g=b.dataset.go; if(g==='all'){fitAll(maps[0]);return;} const p=llAt(+g); maps[0].setView([p[1]-(g==='51.9'?0:0.004),p[0]+0.01],g==='51.9'?15:14); maps[0]._userMoved=true; });
-  fillPlaces(); document.getElementById('pAdd').onclick=addPlayer; let fleetN=4; document.querySelectorAll('#fleet button').forEach(b=>b.onclick=()=>{ fleetN=+b.dataset.n; document.querySelectorAll('#fleet button').forEach(x=>x.classList.toggle('on',x===b)); }); document.getElementById('fleetGo').onclick=()=>startFleet(fleetN); document.getElementById('pClear').onclick=clearPlayers;
+  fillPlaces(); document.getElementById('pAdd').onclick=addPlayer;
+  document.getElementById('pReal').onchange=e=>{ const sh=ships.find(x=>x.mmsi===e.target.value); realPick=sh||null; document.querySelectorAll('#picker .pick').forEach(x=>x.classList.toggle('on',false)); if(sh){ const mm=matchModel(sh); document.getElementById('pName').value=sh.name; document.getElementById('pTeu').value=sh.len>=120?208:sh.len>=100?150:96; document.getElementById('pRealNote').innerHTML=`<b>${sh.name}</b> starts where it is now, km ${sh.km.toFixed(1)}, as the ${mm.name.toLowerCase()}${sh.len?' at '+sh.len+' m':''}.`; } else { document.getElementById('pRealNote').textContent=''; renderPicker(); } }; let fleetN=4; document.querySelectorAll('#fleet button').forEach(b=>b.onclick=()=>{ fleetN=+b.dataset.n; document.querySelectorAll('#fleet button').forEach(x=>x.classList.toggle('on',x===b)); }); document.getElementById('fleetGo').onclick=()=>startFleet(fleetN); document.getElementById('pClear').onclick=clearPlayers;
   [['spd1',1],['spd2',10],['spd3',60]].forEach(([id,v])=>document.getElementById(id).onclick=e=>{ simSpeed=v; running=true; document.querySelectorAll('#clock button').forEach(b=>b.classList.toggle('on',b===e.target)); });
   document.getElementById('pause').onclick=e=>{ running=!running; e.target.textContent=running?'Pause':'Resume'; };
   requestAnimationFrame(tick);
