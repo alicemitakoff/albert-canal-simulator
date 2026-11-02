@@ -148,11 +148,28 @@ body.split #title .brand{margin:0}
 .seat{background:#fff;border-radius:10px;padding:6px;text-align:center;color:#07213a;font-size:11px;font-weight:700}
 .seat img,.seat canvas{display:block;width:100%;height:auto;image-rendering:pixelated}
 .seat.taken{outline:3px solid var(--full)}
-.phone{position:fixed;inset:0;overflow:auto;background:var(--navy);padding:16px;z-index:900;font-size:15px;line-height:1.5}
-.phone h1{font-size:20px;margin:0 0 4px}
-.phone input,.phone select{padding:12px;font-size:16px}
-.phone .btn{padding:13px;font-size:16px;width:100%;margin-top:8px}
-.phone .card{font-size:14px}
+.phone{position:fixed;inset:0;overflow:auto;background:var(--navy);z-index:900;font-size:16px;line-height:1.45;display:flex;flex-direction:column}
+.ph-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--hair-cool);font-size:12.5px;color:var(--mist)}
+.ph-head img{height:16px}
+.ph-body{padding:16px 16px 28px}
+.ph-body h1{font-size:22px;margin:0 0 4px}
+.ph-body label{display:block;margin:12px 0 0;font-size:12.5px;color:var(--mist)}
+.ph-body label input,.ph-body label select{margin-top:4px;font-size:16px;padding:13px 12px;border-radius:10px}
+.ph-row{display:flex;gap:10px}.ph-row label{flex:1}
+.btn.big{width:100%;padding:15px;font-size:17px;margin-top:18px;border-radius:12px}
+#pmap{height:42vh;min-height:220px;flex:0 0 auto;border-bottom:1px solid var(--hair-cool)}
+.ph-clock{font-size:30px;font-weight:700;color:var(--brass);line-height:1}
+.ph-steps{margin:10px 0 0;padding:0;list-style:none;border-left:2px solid var(--hair-cool);margin-left:6px}
+.ph-steps li{position:relative;padding:5px 0 5px 16px;color:var(--faint)}
+.ph-steps li:before{content:"";position:absolute;left:-6px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--hair)}
+.ph-steps li.done{color:var(--mist)}.ph-steps li.done:before{background:var(--mist)}
+.ph-steps li.now{color:var(--ivory);font-weight:700}.ph-steps li.now:before{background:var(--full);box-shadow:0 0 8px var(--full)}
+.phone .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin:10px 0 14px;overflow:hidden}.phone .bar i{display:block;height:100%;background:var(--brass)}
+.phone .soc{margin-top:10px}.phone .rank{color:var(--brass);font-weight:700;margin-top:10px;font-size:18px}
+.ph-wait{text-align:center;padding:60px 0;color:var(--mist)}
+.spin{width:28px;height:28px;border:3px solid var(--hair-cool);border-top-color:var(--brass);border-radius:50%;margin:0 auto 14px;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+body.phone-mode #scene{display:none}
+
 #scene{position:fixed;left:0;top:0;width:calc(100% - 404px);height:100%;z-index:700;background:#000;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .5s ease}
 #scene.on{opacity:1;pointer-events:auto}
 @media (max-width:900px){#scene{width:100%}}
@@ -511,30 +528,43 @@ function renderSeats(id){
   const box=document.getElementById('seats'); box.innerHTML='';
   for(let i=1;i<=SEATS;i++){ const url=location.origin+location.pathname+'?join='+id+'&seat='+i; const q=qrcode(0,'M'); q.addData(url); q.make(); const d=document.createElement('div'); d.className='seat'+(seatConns[i]?' taken':''); d.innerHTML=q.createImgTag(3,4)+`Seat ${i}${seatConns[i]?' · joined':''}`; d.title=url; box.appendChild(d); }
 }
-function pushSeatStates(){ for(const k in seatConns){ const p=players.find(x=>x.seat==k); if(!p)continue; try{ seatConns[k].send({type:'state',name:p.name,km:+p.km.toFixed(1),state:p.state,packs:p.packs,log:p.log.slice(-5).map(l=>[fmtT(l[0]),l[1].replace(/<[^>]+>/g,'')]),result:p.result?{h:h2(p.result.h),lost:h2(p.hoursLost),co2:p.result.co2Saved.toFixed(1)}:null,clock:fmtT(simT)}); }catch(e){} } }
+function pushSeatStates(){ for(const k in seatConns){ const p=players.find(x=>x.seat==k); if(!p)continue; try{ const ll=llAt(stopDisplayKm(p)); const st=p.stop&&p.state==='hold'?{title:p.stop.sc.title,steps:p.stop.sc.steps,cur:Math.min(p.stop.sc.steps.length-1,Math.floor(stopProgress(p)*p.stop.sc.steps.length)),f:stopProgress(p)}:null;
+  seatConns[k].send({type:'state',name:p.name,teu:p.teu,from:p.from.name.split(' (')[0],to:p.to.name.split(' (')[0],km:+p.km.toFixed(1),lat:ll[1],lon:ll[0],hdg:(bearingAt(p.km)+(p.dir<0?180:0))%360,state:p.state,packs:p.packs,stop:st,lastLog:p.log.length?[fmtT(p.log[p.log.length-1][0]),p.log[p.log.length-1][1].replace(/<[^>]+>/g,'')]:null,
+    result:p.result?{h:h2(p.result.h),lost:h2(p.hoursLost),co2:p.result.co2Saved.toFixed(1),how:p.swapHow||null,rank:p.rank,of:players.length,packs:p.packs}:null,clock:fmtT(simT),startT:fmtT(p.startT)}); }catch(e){} } }
 function phoneStart(hostId,seat){
-  document.querySelector('.chrome').style.display='none'; document.getElementById('maps').style.display='none';
+  document.querySelector('.chrome').style.display='none'; document.getElementById('maps').style.display='none'; document.body.classList.add('phone-mode');
   const el=document.createElement('div'); el.className='phone'; document.body.appendChild(el);
-  el.innerHTML=`<h1>Albert Canal corridor</h1><div class="muted">Seat ${seat} · connecting to the big screen…</div>`;
+  const head=`<div class="ph-head"><img src="assets/brand/natpower-digital-white.svg" alt="NatPower Digital"><span>Albert Canal simulator · seat ${seat}</span></div>`;
+  el.innerHTML=head+`<div class="ph-body"><div class="ph-wait"><div class="spin"></div><p>Connecting to the big screen…</p></div></div>`;
+  let pmap=null, pmk=null, phase='setup', lastStopTitle='';
   const peer=new Peer({debug:0});
   peer.on('open',()=>{ phoneConn=peer.connect(hostId,{reliable:true}); phoneConn.on('open',()=>phoneConn.send({type:'hello',seat}));
-    phoneConn.on('data',d=>{ if(d.type==='seat'){ el.innerHTML=`<h1>Seat ${seat}</h1><div class="muted">Set up your vessel. It appears on the big screen when you set sail.</div>
-      <div class="row"><input id="qName" placeholder="Vessel name" maxlength="18"></div>
-      <div class="row"><select id="qFrom">${d.places.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div><div class="row"><select id="qTo">${d.places.map(p=>`<option value="${p.id}" ${p.id==='meerhout'?'selected':''}>${p.name}</option>`).join('')}</select></div>
-      <div class="row"><select id="qTeu"><option value="96">96 TEU</option><option value="150" selected>150 TEU</option><option value="208">208 TEU</option><option value="342">342 TEU</option></select><select id="qStart"><option value="5">Leave 05:00</option><option value="7" selected>Leave 07:00</option><option value="11">Leave 11:00</option><option value="15">Leave 15:00</option><option value="21">Leave 21:00</option></select></div>
-      <div class="row"><select id="qSwap"><option value="hub">Charging hub: hub crane swap (1)</option><option value="call" selected>Boxes for Meerhout: berth swap (2)</option><option value="pass">Passing through: tender at the lock (3)</option><option value="none">No swap</option></select></div>
-      <button class="btn primary" id="qGo">Set sail</button><div id="qState"></div>`;
-      document.getElementById('qGo').onclick=()=>{ phoneConn.send({type:'add',seat,cfg:{name:document.getElementById('qName').value,from:document.getElementById('qFrom').value,to:document.getElementById('qTo').value,teu:document.getElementById('qTeu').value,startH:document.getElementById('qStart').value,swapPlan:document.getElementById('qSwap').value}}); document.getElementById('qState').innerHTML='<div class="faint">Sent to the big screen…</div>'; }; }
-      else if(d.type==='ok'){ document.getElementById('qState').innerHTML='<div class="card">Your vessel is on the canal. Watch the big screen; your own log appears here.</div>'; }
-      else if(d.type==='state'){ const st=document.getElementById('qState'); if(!st)return; st.innerHTML=`<div class="card hi"><div class="big" style="font-size:18px">${d.name}</div><div class="kv"><b>Time</b><span>${d.clock}</span><b>Position</b><span>km ${d.km}</span><b>Status</b><span>${d.state==='hold'?'holding':d.state==='wait'?'waiting to leave':d.state==='done'?'arrived':'under way'}</span></div><div class="soc">${d.packs.map(x=>`<div><i style="width:${x}%;background:${x<=20?'var(--low)':x<60?'var(--amber)':'var(--full)'}"></i></div>`).join('')}</div>${d.result?`<div class="score"><div><b>${d.result.h}</b><small>on the water</small></div><div><b>${d.result.lost}</b><small>lost waiting</small></div><div><b>${d.result.co2} t</b><small>CO2 avoided</small></div></div>`:''}<ul class="tl">${d.log.map(l=>`<li class="past"><span class="t">${l[0]}</span>${l[1]}</li>`).join('')}</ul></div>`; } });
-    phoneConn.on('close',()=>{ el.insertAdjacentHTML('beforeend','<div class="faint">The big screen closed the game.</div>'); }); });
-  peer.on('error',e=>{ el.innerHTML+=`<div class="card">Could not reach the big screen (${e.type}). Ask for a fresh code.</div>`; });
+    phoneConn.on('data',d=>{
+      if(d.type==='seat'){ phase='setup'; el.innerHTML=head+`<div class="ph-body"><h1>Your vessel</h1><p class="muted">Set it up here, then watch it on the big screen and follow it on this phone.</p>
+        <label>Name<input id="qName" placeholder="Vessel name" maxlength="18" value="${['Albatros','Canal Dream','Meerhout Express','Blue Pack'][(seat-1)%4]}"></label>
+        <label>From<select id="qFrom">${d.places.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></label>
+        <label>To<select id="qTo">${d.places.map(p=>`<option value="${p.id}" ${p.id==='meerhout'?'selected':''}>${p.name}</option>`).join('')}</select></label>
+        <div class="ph-row"><label>Cargo<select id="qTeu"><option value="96">96 TEU</option><option value="150" selected>150 TEU</option><option value="208">208 TEU</option><option value="342">342 TEU</option></select></label><label>Leave at<select id="qStart"><option value="5">05:00</option><option value="7" selected>07:00</option><option value="11">11:00</option><option value="15">15:00</option><option value="21">21:00</option></select></label></div>
+        <label>Battery swap<select id="qSwap"><option value="hub">At the charging hub, hub crane (scenario 1)</option><option value="call" selected>At the berth while the boxes are worked (scenario 2)</option><option value="pass">Tender at the lock, passing through (scenario 3)</option><option value="none">No swap</option></select></label>
+        <button class="btn primary big" id="qGo">Set sail</button><div id="qState" class="faint" style="margin-top:10px"></div></div>`;
+        document.getElementById('qGo').onclick=()=>{ phoneConn.send({type:'add',seat,cfg:{name:document.getElementById('qName').value,from:document.getElementById('qFrom').value,to:document.getElementById('qTo').value,teu:document.getElementById('qTeu').value,startH:document.getElementById('qStart').value,swapPlan:document.getElementById('qSwap').value}}); document.getElementById('qState').textContent='Sent to the big screen…'; }; }
+      else if(d.type==='ok'){ document.getElementById('qState').textContent='Your vessel is on the canal.'; }
+      else if(d.type==='state'){
+        if(phase!=='live'){ phase='live'; el.innerHTML=head+`<div id="pmap"></div><div class="ph-body" id="pbody"></div>`; pmap=L.map('pmap',{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,touchZoom:false}); pmap.setView([d.lat,d.lon],13); ESRI().addTo(pmap); ORTHO().addTo(pmap); if(C){ L.polyline(C.canal.map(p=>[p[1],p[0]]),{color:'#5bb8e6',weight:3,opacity:.95}).addTo(pmap); for(const l of C.locks){ if(l.km<=KM_END) L.circleMarker([l.ll[1],l.ll[0]],{radius:5,color:'#000',weight:1,fillColor:'#e8a33d',fillOpacity:1}).addTo(pmap); } } pmk=L.marker([d.lat,d.lon],{icon:shipIcon('game player green',d.hdg||0)}).addTo(pmap); }
+        const z=d.stop?15:13; pmk.setLatLng([d.lat,d.lon]); pmk.setIcon(shipIcon('game player '+(d.packs[0]<=20&&d.packs[1]<=20?'red':d.packs[1]<60?'amber':'green'),d.hdg||0)); pmap.setView([d.lat,d.lon],z,{animate:true});
+        const body=document.getElementById('pbody'); const soc=`<div class="soc">${d.packs.map(x=>`<div><i style="width:${x}%;background:${x<=20?'var(--low)':x<60?'var(--amber)':'var(--full)'}"></i></div>`).join('')}</div><div class="faint">pack A ${d.packs[0]}% · pack B ${d.packs[1]}%</div>`;
+        if(d.result){ const r=d.result; body.innerHTML=`<h1>${d.name} has arrived</h1><p class="muted">${d.from} → ${d.to} · ${d.teu} TEU · ${d.startT} to ${d.clock}</p><div class="score"><div><b>${r.h}</b><small>on the water</small></div><div><b>${r.lost}</b><small>lost waiting</small></div><div><b>${r.co2} t</b><small>CO2 avoided</small></div></div><p class="muted">${r.how==='lock'?'Scenario 3: packs swapped by the tender during the Kwaadmechelen lock wait.':r.how==='hub'?'Scenario 1: a 30 minute stop at the charging hub, packs swapped by the hub crane.':r.how==='berth'?'Scenario 2: packs swapped at the berth while the containers were handled.':'No swap on this trip.'}</p>${soc}${r.of>1?`<div class="rank">${r.rank===1?'First home':r.rank+(['','st','nd','rd'][r.rank]||'th')+' home'} of ${r.of}</div>`:''}`; }
+        else if(d.stop){ body.innerHTML=`<div class="ph-clock">${d.clock}</div><h1>${d.stop.title}</h1><p class="muted">${d.name} · km ${d.km}</p><ol class="ph-steps">${d.stop.steps.map((t,i)=>`<li class="${i<d.stop.cur?'done':i===d.stop.cur?'now':''}">${t}</li>`).join('')}</ol><div class="bar"><i style="width:${Math.round(d.stop.f*100)}%"></i></div>${soc}`; }
+        else { body.innerHTML=`<div class="ph-clock">${d.clock}</div><h1>${d.name}</h1><p class="muted">${d.from} → ${d.to} · ${d.teu} TEU · ${d.state==='wait'?'leaves at '+d.startT:d.state==='sail'?'under way, km '+d.km:'km '+d.km}</p>${soc}${d.lastLog?`<p class="faint" style="margin-top:12px">${d.lastLog[0]} · ${d.lastLog[1]}</p>`:''}`; }
+      } });
+    phoneConn.on('close',()=>{ el.insertAdjacentHTML('beforeend','<div class="ph-body faint">The big screen closed the game.</div>'); }); });
+  peer.on('error',e=>{ el.innerHTML=head+`<div class="ph-body"><p>Could not reach the big screen (${e.type}). Ask for a fresh code.</p></div>`; });
 }
 
 // ---------- boot ----------
 async function boot(){
   const q=new URLSearchParams(location.search);
-  if(q.get('join')){ phoneStart(q.get('join'),+q.get('seat')||1); return; }
+  if(q.get('join')){ try{ C=await (await fetch('data/corridor.json?v=1')).json(); }catch(e){} phoneStart(q.get('join'),+q.get('seat')||1); return; }
   C=await (await fetch('data/corridor.json?v=1')).json();
   setLayout(1); mainMap=maps[0]; maps[0].invalidateSize(); fitAll(maps[0]); setTimeout(()=>{maps[0].invalidateSize(); if(!maps[0]._userMoved)fitAll(maps[0]);},120); maps[0].on('dragstart',()=>{maps[0]._userMoved=true;}); maps[0].getContainer().addEventListener('wheel',()=>{maps[0]._userMoved=true;},{passive:true}); maps[0].getContainer().querySelector('.leaflet-control-zoom').addEventListener('click',()=>{maps[0]._userMoved=true;}); maps[0].on('zoomend',()=>{ if((maps[0].getZoom()<12)!==maps[0]._wasFar){ maps[0]._wasFar=maps[0].getZoom()<12; drawLive(); } });
   document.querySelectorAll('.tabs button[data-t]').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.tabs button[data-t]').forEach(x=>x.classList.toggle('on',x===b)); document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='sec-'+b.dataset.t)); document.getElementById('side').classList.remove('fold'); });
