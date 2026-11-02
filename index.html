@@ -24,15 +24,28 @@ select option{background:#0b1e33}
 .map{position:relative;background:#0a1a2c}
 .map .tag{position:absolute;left:10px;top:10px;z-index:500;background:var(--glass);border:1px solid var(--hair-cool);border-radius:10px;padding:6px 10px;font-size:13px;pointer-events:none}
 .map .tag b{color:var(--brass)}
-.map .stop{position:absolute;left:10px;bottom:14px;z-index:500;background:var(--glass-strong);border:1px solid var(--hair-cool);border-radius:12px;padding:10px 12px;font-size:12.5px;max-width:340px;pointer-events:none;display:none}
-.map .stop.on{display:block}
+.map .stop{position:absolute;left:10px;bottom:14px;z-index:500;background:var(--glass-strong);border:1px solid var(--hair-cool);border-radius:12px;padding:10px 12px;font-size:12.5px;max-width:340px;pointer-events:none}
+.map .stop{opacity:0;transition:opacity .4s ease;display:block}
+.map .stop.on{opacity:1}
 .map .stop h4{margin:0 0 4px;font-size:13.5px;color:var(--brass)}
+body.split .map .stop{max-width:290px;font-size:11.5px;padding:8px 10px}
+body.split .map .stop .score b{font-size:14px}
+body.split .map .stop h4{font-size:12.5px}
 .map .stop ol{margin:4px 0 0;padding:0;list-style:none}
 .map .stop li{padding:2px 0 2px 16px;position:relative;color:var(--faint)}
 .map .stop li:before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--hair)}
 .map .stop li.done{color:var(--mist)} .map .stop li.done:before{background:var(--mist)}
 .map .stop li.now{color:var(--ivory);font-weight:700} .map .stop li.now:before{background:var(--full);box-shadow:0 0 8px var(--full)}
 .map .stop .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}.map .stop .bar i{display:block;height:100%;background:var(--brass)}
+.map .report{position:absolute;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:rgba(5,18,36,.72);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .6s ease}
+.map .report.on{opacity:1;pointer-events:auto}
+.map .report .card{max-width:440px;width:min(92%,440px);padding:18px 20px;margin:0}
+.map .report h3{margin:0;font-size:22px}
+.map .report .route{color:var(--mist);margin:2px 0 10px}
+.map .report .score{grid-template-columns:repeat(3,1fr)}
+.map .report .kv{margin:10px 0}
+.map .report .rank{color:var(--brass);font-weight:700;margin-top:8px}
+.map .report .btn{margin-top:10px}
 .chamber{stroke:#e8a33d;stroke-width:3;fill:rgba(232,163,61,.15)}
 .gate{stroke:#fff;stroke-width:4}
 .leaflet-container{background:#0a1a2c;font-family:var(--sans)}
@@ -63,6 +76,13 @@ select option{background:#0b1e33}
 #title .sub{color:var(--mist);font-size:12.5px;margin-top:4px}
 #title .brand{display:flex;align-items:center;gap:8px;margin-top:8px;color:var(--faint);font-size:11px}
 #title .brand img{height:16px}
+body.split #title{padding:5px 10px;max-width:none;left:auto;right:16px;top:auto;bottom:30px}
+body.split #clock{left:50%;top:auto;bottom:16px}
+body.split #toast{left:50%;bottom:70px}
+body.split #side{top:16px;bottom:auto}
+body.split #side:not(.fold){bottom:16px}
+body.split #title h1,body.split #title .sub{display:none}
+body.split #title .brand{margin:0}
 #side{position:absolute;right:16px;top:16px;bottom:16px;width:372px;display:flex;flex-direction:column;overflow:hidden}
 #side.fold{height:auto;bottom:auto}
 #side.fold .body{display:none}
@@ -113,7 +133,7 @@ select option{background:#0b1e33}
 .sw.hub{height:10px;width:10px;border-radius:50%;background:var(--brass)}
 .sw.br{height:6px;width:12px;background:#f3e4b8;border-radius:1px}
 .sw.ves{width:9px;height:14px;background:#fff;clip-path:polygon(50% 0,100% 30%,100% 100%,0 100%,0 30%)}
-#clock{position:absolute;left:50%;top:16px;transform:translateX(-50%);padding:8px 14px;display:none;align-items:center;gap:14px;font-size:13px}
+#clock{position:absolute;left:calc(50% - 202px);top:16px;transform:translateX(-50%);padding:8px 14px;display:none;align-items:center;gap:14px;font-size:13px}
 #clock.on{display:flex}
 #clock .t{font-size:20px;font-weight:700;color:var(--brass);min-width:62px}
 #clock button{background:none;border:1px solid var(--hair-cool);border-radius:8px;padding:4px 9px;font-size:12px;color:var(--mist)}
@@ -133,8 +153,9 @@ select option{background:#0b1e33}
 .phone input,.phone select{padding:12px;font-size:16px}
 .phone .btn{padding:13px;font-size:16px;width:100%;margin-top:8px}
 .phone .card{font-size:14px}
-#scene{position:fixed;inset:0;right:404px;z-index:700;background:#000;display:none;flex-direction:column}
-#scene.on{display:flex}
+#scene{position:fixed;left:0;top:0;width:calc(100% - 404px);height:100%;z-index:700;background:#000;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .5s ease}
+#scene.on{opacity:1;pointer-events:auto}
+@media (max-width:900px){#scene{width:100%}}
 #scene iframe{flex:1;border:0;width:100%;height:100%;background:#0b1e33}
 #scene .bar{display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--glass-strong);border-bottom:1px solid var(--hair-cool);font-size:13px}
 #scene .bar b{color:var(--brass)}
@@ -142,7 +163,7 @@ select option{background:#0b1e33}
 #scene .bar button{background:var(--brass-soft);border:1px solid rgba(124,200,255,.35);border-radius:8px;padding:6px 12px;font-size:13px}
 #scene .bar button.x{background:none;border-color:var(--hair-cool)}
 @media (max-width:900px){#scene{right:0}}
-#toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);padding:9px 14px;font-size:13px;opacity:0;transition:opacity .3s;max-width:70vw;text-align:center}
+#toast{position:absolute;left:calc(50% - 202px);bottom:40px;transform:translateX(-50%);padding:9px 14px;font-size:13px;opacity:0;transition:opacity .3s;max-width:70vw;text-align:center}
 #toast.on{opacity:1}
 @media (max-width:900px){#side{width:min(372px,calc(100vw - 32px))}#title{max-width:calc(100vw - 32px)}}
 </style>
@@ -174,6 +195,9 @@ select option{background:#0b1e33}
         <div class="row"><select id="pTeu"><option value="96">96 TEU</option><option value="150" selected>150 TEU</option><option value="208">208 TEU</option><option value="342">342 TEU (4 layers)</option></select><select id="pStart"><option value="5">Leave 05:00</option><option value="7" selected>Leave 07:00</option><option value="11">Leave 11:00</option><option value="15">Leave 15:00</option><option value="21">Leave 21:00</option></select></div>
         <div class="row"><select id="pSwap"><option value="call" selected>Boxes for Meerhout: swap at the berth while the cranes work</option><option value="pass">No boxes for Meerhout: the tender meets me at the lock</option><option value="none">No swap, see what happens</option></select></div>
         <div class="row"><button class="btn primary" id="pAdd">Add my vessel</button><button class="btn ghost" id="pClear">Clear canal</button></div>
+        <div class="eyebrow">Or start a fleet on this screen</div>
+        <div class="muted">No phones to hand? Pick how many vessels play. One fills the screen, four split it into quadrants. Each gets its own name, cargo, route and departure.</div>
+        <div class="row" id="fleet"><button class="btn" data-n="1">1 vessel</button><button class="btn" data-n="2">2</button><button class="btn" data-n="3">3</button><button class="btn" data-n="4">4 vessels</button></div>
         <div class="eyebrow">Play from your phone</div>
         <div class="muted">Each seat has its own code. Scan it, set up your vessel on the phone and watch it on this screen.</div>
         <div class="seats" id="seats"><div class="faint">Opening the seats…</div></div>
@@ -234,8 +258,9 @@ const ORTHO=()=>L.tileLayer('https://geo.api.vlaanderen.be/OMZ/wmts?SERVICE=WMTS
 const OSM=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'});
 const LABELS=()=>L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:20,subdomains:'abcd',attribution:'labels © CARTO',opacity:.9,pane:'labelsPane'});
 function makeMap(el){
-  const m=L.map(el,{zoomControl:true,attributionControl:true,preferCanvas:true,zoomSnap:.5,worldCopyJump:false});
+  const m=L.map(el,{zoomControl:false,attributionControl:true,preferCanvas:true,zoomSnap:.5,worldCopyJump:false});
   m.createPane('labelsPane'); m.getPane('labelsPane').style.zIndex=350; m.getPane('labelsPane').style.pointerEvents='none';
+  m.setView([51.17,4.78],11); L.control.zoom({position:'bottomright'}).addTo(m);
   m._base=ORTHO().addTo(m); m._far=ESRI().addTo(m); m._far.bringToBack();
   L.polyline(C.canal.map(p=>[p[1],p[0]]),{color:'#0b3a5e',weight:9,opacity:.55,lineCap:'round'}).addTo(m);
   m._canal=L.polyline(C.canal.map(p=>[p[1],p[0]]),{color:'#5bb8e6',weight:3.5,opacity:.95,lineCap:'round'}).addTo(m);
@@ -254,7 +279,7 @@ function drawStatic(m){
   for(const h of C.hubs){ if(h.id==='genk')continue; const isMeer=Math.abs(h.km-52)<2; const p=isMeer?[5.0935,51.1035]:[h.ll[0],h.ll[1]]; const mk=L.circleMarker([p[1],p[0]],{radius:8,color:'#fff',weight:2,fillColor:'#7cc8ff',fillOpacity:.95}).addTo(g.terms); mk.bindPopup(`<b>${isMeer?'BCTN Meerhout charging hub':h.name}</b><br>${h.role}<br><span class="badge eaas">EaaS</span> charging as a service${isMeer?'<br><a href="https://alicemitakoff.github.io/albert-canal-vr/v2/" target="_blank" style="color:#7cc8ff">Open the 3D hub scene</a>':''}`); L.marker([p[1],p[0]],{icon:L.divIcon({className:'lbl',html:isMeer?'BCTN Meerhout hub':h.name,iconAnchor:[-12,-4]}),interactive:false}).addTo(g.labels); }
 }
 function fitAll(m){ m.fitBounds(L.latLngBounds(C.canal.filter((p,i)=>C.km[i]<=KM_END).map(p=>[p[1],p[0]])),{paddingTopLeft:[40,130],paddingBottomRight:[maps.length===1?420:40,60]}); }
-function setLayout(n){ const box=document.getElementById('maps'); box.className=n>=3?'q4':n===2?'q2':''; while(maps.length<Math.max(1,Math.min(4,n))){ const d=document.createElement('div'); d.className='map'; d.id='map'+maps.length; d.innerHTML='<div class="tag"></div><div class="stop"></div>'; box.appendChild(d); const m=makeMap(d); maps.push(m); } while(maps.length>Math.max(1,n)){ const m=maps.pop(); m.remove(); box.lastElementChild.remove(); } setTimeout(()=>maps.forEach(m=>m.invalidateSize()),50); }
+function setLayout(n){ const box=document.getElementById('maps'); box.className=n>=3?'q4':n===2?'q2':''; const wasSplit=document.body.classList.contains('split'); document.body.classList.toggle('split',n>1); if(n>1&&!wasSplit){ document.getElementById('side').classList.add('fold'); document.getElementById('foldBtn').textContent='▴'; } if(n<=1&&wasSplit){ document.getElementById('side').classList.remove('fold'); document.getElementById('foldBtn').textContent='▾'; } while(maps.length<Math.max(1,Math.min(4,n))){ const d=document.createElement('div'); d.className='map'; d.id='map'+maps.length; d.innerHTML='<div class="tag"></div><div class="stop"></div><div class="report"></div>'; box.appendChild(d); const m=makeMap(d); maps.push(m); } while(maps.length>Math.max(1,n)){ const m=maps.pop(); m.remove(); box.lastElementChild.remove(); } setTimeout(()=>maps.forEach(m=>m.invalidateSize()),50); }
 
 // ---------- live vessels ----------
 let ships=[], history={}, picked=[], selected=null, liveMarkers={};
@@ -372,6 +397,8 @@ function addPlayerCfg(cfg,seat){
   if(simT>p.startT)simT=Math.min(simT,p.startT);
   players.push(p); document.getElementById('legend').style.display='none'; setLayout(players.length); for(const m of maps)m._userMoved=false; drawGame(); renderPlayers(); document.getElementById('clock').classList.add('on'); fillPlaces(); toast(`${name} is on the canal, leaving ${from.name.split(' (')[0]} at ${String(startH).padStart(2,'0')}:00.`); return true;
 }
+const FLEET=[{name:'Albatros',from:'antwerp',to:'meerhout',teu:150,startH:7,swapPlan:'call'},{name:'Canal Dream',from:'antwerp',to:'end',teu:208,startH:11,swapPlan:'pass'},{name:'Meerhout Express',from:'wijnegem',to:'meerhout',teu:96,startH:5,swapPlan:'call'},{name:'Blue Pack',from:'antwerp',to:'ham',teu:342,startH:15,swapPlan:'pass'}];
+function startFleet(n){ clearPlayers(); for(let i=0;i<n;i++)addPlayerCfg(FLEET[i],null); document.getElementById('spd2').click(); toast(n===1?'One vessel on the canal, full screen.':n+' vessels on the canal, the screen is split.'); }
 function clearPlayers(){ document.getElementById('legend').style.display=''; players=[]; dayStart=null; simT=null; setLayout(1); for(const m of maps)m._g.game.clearLayers(); renderPlayers(); document.getElementById('clock').classList.remove('on'); fillPlaces(); }
 // ---------- every stop is a scene: zoom to the place and play the sequence ----------
 const STOPS={
@@ -412,10 +439,10 @@ function stepGame(dtH){
     const used=p.energy/1000; p.packs=[Math.max(0,Math.round(100-used/PACK_USABLE*100)),Math.max(0,Math.round(100-Math.max(0,used-PACK_USABLE)/PACK_USABLE*100))];
     const crossed=k=>(p.dir>0&&kmBefore<k&&p.km>=k)||(p.dir<0&&kmBefore>k&&p.km<=k);
     for(const l of C.locks){ if(l.km>KM_END||p.locksDone.includes(l.name))continue; if(crossed(l.km)){ p.km=l.km; const hour=new Date(simT).getHours(); const q=congestion(hour,l.km); const wait=LOCK_MIN/60+q; p.hoursLost+=q; p.locksDone.push(l.name); p.state='hold'; p.stateUntil=simT+wait*36e5; startStop(p,'lock',l); p.log.push([simT,`${l.name} lock: ${h2(LOCK_MIN/60)} passage${q>0.2?' plus '+h2(q)+' queue (leaving at '+String(hour).padStart(2,'0')+':00 h traffic)':''}`]);
-        if(!p.swapped&&l.name==='Kwaadmechelen'&&p.swapPlan==='pass'){ p.swapped=true; p.packs=[100,100]; p.energy=0; p.log.push([simT,`Tender alongside at the waiting berth: both packs swapped in 30 min, inside the lock wait (scenario 3) <span class="badge baas">BaaS</span> <span class="badge own">owner: NatPower</span>`]); showScene('lock',p.name+' at Kwaadmechelen lock',fmtT(simT)+' · the tender swaps both packs during the lock wait (scenario 3)'); } return; } }
-    if(crossed(HUB_KM)&&!p.hubDone){ p.hubDone=true; const stops=p.swapPlan==='call'||p.to.km===HUB_KM; if(!stops){ p.log.push([simT,'Passes BCTN Meerhout without a cargo call']); if(p.to.km===HUB_KM)finish(p); return; } p.km=HUB_KM; const call=1; p.state='hold'; p.stateUntil=simT+call*36e5; startStop(p,'hub'); p.log.push([simT,`BCTN Meerhout: cargo call ${h2(call)}, boxes in and out <span class="badge eaas">EaaS</span>`]); if(!p.swapped&&p.swapPlan!=='none'){ p.swapped=true; p.packs=[100,100]; p.energy=0; p.log.push([simT,'Hub crane swaps both packs while the boxes are worked: 30 min inside the call (scenario 2) <span class="badge eaas">EaaS</span> <span class="badge own">owner: NatPower</span>']); showScene('berth',p.name+' at the BCTN Meerhout berth',fmtT(simT)+' · boxes in and out, both packs swapped by the crane (scenario 2)'); } if(p.to.km===HUB_KM){ finish(p); } return; }
-    if(p.nextStopKm!=null&&crossed(p.nextStopKm)&&p.stopsLeft>0){ p.stopsLeft--; const kinds=['Oncoming push convoy at a bridge: 20 min hold','Bridge works: single lane, 15 min','Low water near the bank: slow passage, 25 min']; const k=kinds[Math.floor(Math.random()*kinds.length)]; const mins=+k.match(/(\d+) min/)[1]; p.hoursLost+=mins/60; p.state='hold'; p.stateUntil=simT+mins*60e3; p.log.push([simT,k]); startStop(p,'hold',k.split(':')[0]); p.nextStopKm=p.stopsLeft?p.km+p.dir*(5+Math.random()*10):null; return; }
-    if(p.packs[1]<=0&&!p.done){ p.state='hold'; p.stateUntil=simT+CHARGE_H*36e5; p.hoursLost+=CHARGE_H; startStop(p,'charge'); p.packs=[100,100]; p.energy=0; p.log.push([simT,`Packs empty at km ${p.km.toFixed(1)}: ${CHARGE_H} h alongside a charger <span class="badge eaas">EaaS</span>`]); return; }
+        if(!p.swapped&&l.name==='Kwaadmechelen'&&p.swapPlan==='pass'){ p.swapped=true; p.packs=[100,100]; p.energy=0; p.log.push([simT,`Tender alongside at the waiting berth: both packs swapped in 30 min, inside the lock wait (scenario 3) <span class="badge baas">BaaS</span> <span class="badge own">owner: NatPower</span>`]); showScene('lock',p.name+' at Kwaadmechelen lock',fmtT(simT)+' · the tender swaps both packs during the lock wait (scenario 3)',p); } continue; } }
+    if(crossed(HUB_KM)&&!p.hubDone){ p.hubDone=true; const stops=p.swapPlan==='call'||p.to.km===HUB_KM; if(!stops){ p.log.push([simT,'Passes BCTN Meerhout without a cargo call']); if(p.to.km===HUB_KM)finish(p); continue; } p.km=HUB_KM; const call=1; p.state='hold'; p.stateUntil=simT+call*36e5; startStop(p,'hub'); p.log.push([simT,`BCTN Meerhout: cargo call ${h2(call)}, boxes in and out <span class="badge eaas">EaaS</span>`]); if(!p.swapped&&p.swapPlan!=='none'){ p.swapped=true; p.packs=[100,100]; p.energy=0; p.log.push([simT,'Hub crane swaps both packs while the boxes are worked: 30 min inside the call (scenario 2) <span class="badge eaas">EaaS</span> <span class="badge own">owner: NatPower</span>']); showScene('berth',p.name+' at the BCTN Meerhout berth',fmtT(simT)+' · boxes in and out, both packs swapped by the crane (scenario 2)',p); } if(p.to.km===HUB_KM){ finish(p); } continue; }
+    if(p.nextStopKm!=null&&crossed(p.nextStopKm)&&p.stopsLeft>0){ p.stopsLeft--; const kinds=['Oncoming push convoy at a bridge: 20 min hold','Bridge works: single lane, 15 min','Low water near the bank: slow passage, 25 min']; const k=kinds[Math.floor(Math.random()*kinds.length)]; const mins=+k.match(/(\d+) min/)[1]; p.hoursLost+=mins/60; p.state='hold'; p.stateUntil=simT+mins*60e3; p.log.push([simT,k]); startStop(p,'hold',k.split(':')[0]); p.nextStopKm=p.stopsLeft?p.km+p.dir*(5+Math.random()*10):null; continue; }
+    if(p.packs[1]<=0&&!p.done){ p.state='hold'; p.stateUntil=simT+CHARGE_H*36e5; p.hoursLost+=CHARGE_H; startStop(p,'charge'); p.packs=[100,100]; p.energy=0; p.log.push([simT,`Packs empty at km ${p.km.toFixed(1)}: ${CHARGE_H} h alongside a charger <span class="badge eaas">EaaS</span>`]); continue; }
     if(crossed(p.to.km)){ p.km=p.to.km; finish(p); }
   }
 }
@@ -424,7 +451,20 @@ function drawGame(){
   for(const m of maps)m._g.game.clearLayers();
   players.forEach((p,i)=>{ const ll=llAt(stopDisplayKm(p)); const hdg=(bearingAt(p.km)+(p.dir<0?180:0))%360; const cls='game player '+(p.packs[0]<=20&&p.packs[1]<=20?'red':p.packs[1]<60?'amber':'green');
     for(const m of maps){ const mk=L.marker([ll[1],ll[0]],{icon:shipIcon(cls,hdg),zIndexOffset:900}).addTo(m._g.game); mk.bindTooltip(`<b>${p.name}</b> · ${p.teu} TEU · km ${p.km.toFixed(1)}<br>${p.state==='hold'?'holding':p.state==='wait'?'waiting to leave':p.state==='done'?'arrived':'under way'} · packs ${p.packs[0]}% / ${p.packs[1]}%`,{permanent:true,direction:'right',offset:[10,0]}); }
-    const m=maps[Math.min(i,maps.length-1)]; if(maps.length>1||players.length===1){ const tag=m.getContainer().querySelector('.tag'); if(tag)tag.innerHTML=`<b>${p.name}</b> · ${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]}`; if(!m._userMoved&&!(p.stop&&p.state==='hold')){ const z=m.getZoom()<12?13:m.getZoom(); const pt=m.project([ll[1],ll[0]],z).add(L.point(maps.length===1?190:0,30)); m.setView(m.unproject(pt,z),z,{animate:true,duration:.8}); } renderStop(m,p); } });
+    const m=maps[Math.min(i,maps.length-1)]; if(maps.length>1||players.length===1){ const tag=m.getContainer().querySelector('.tag'); if(tag)tag.innerHTML=`<b>${p.name}</b> · ${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]}`; if(!m._userMoved&&!(p.stop&&p.state==='hold')){ const z=m.getZoom()<12?13:m.getZoom(); const pt=m.project([ll[1],ll[0]],z).add(L.point(maps.length===1?190:0,30)); m.setView(m.unproject(pt,z),z,{animate:true,duration:.8}); } renderStop(m,p); renderReport(m,p); } });
+}
+function renderReport(m,p){
+  const el=m.getContainer().querySelector('.report'); if(!el)return;
+  if(!p||!p.done||!p.result){ el.classList.remove('on'); return; }
+  if(el.dataset.for===p.name+p.endT){ return; }
+  el.dataset.for=p.name+p.endT; const r=p.result; const finished=players.filter(x=>x.done).sort((a,b)=>a.result.h-b.result.h); const rank=finished.indexOf(p)+1;
+  const dieselL=r.kwh*DIESEL_KG_PER_KWH/0.84; const locks=p.locksDone.length;
+  el.innerHTML=`<div class="card panel"><h3>${p.name} has arrived</h3><div class="route">${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]} · ${p.teu} TEU · left ${fmtT(p.startT)}, arrived ${fmtT(p.endT)}</div>
+  <div class="score"><div><b>${h2(r.h)}</b><small>on the water</small></div><div><b>${h2(p.hoursLost)}</b><small>lost waiting</small></div><div><b>${r.co2Saved.toFixed(1)} t</b><small>CO2 avoided</small></div></div>
+  <div class="kv"><b>Distance</b><span>${r.dist.toFixed(1)} km, ${locks} lock${locks===1?'':'s'}</span><b>Energy</b><span>${Math.round(r.kwh)} kWh from the packs</span><b>Instead of</b><span>${Math.round(dieselL)} litres of diesel</span><b>Battery swaps</b><span>${p.swapped?'1, '+(p.swapPlan==='pass'?'tender at Kwaadmechelen lock':'at the BCTN Meerhout berth'):'none'}</span><b>Packs at arrival</b><span>${p.packs[0]}% and ${p.packs[1]}%</span><b>Business model</b><span>${p.swapped?(p.swapPlan==='pass'?'battery as a service, tender':'energy as a service, hub'):'own charging'}</span></div>
+  ${players.length>1?`<div class="rank">${rank===1?'First home':rank+(['','st','nd','rd'][rank]||'th')+' home'} of ${finished.length} arrived, ${players.length} playing</div>`:''}
+  <button class="btn ghost" onclick="this.closest('.report').classList.remove('on')">Back to the map</button></div>`;
+  el.classList.add('on');
 }
 function renderPlayers(){
   const box=document.getElementById('players'); box.innerHTML=players.map(p=>{ const r=p.result; return `<div class="card ${p.done?'hi':''}"><div class="row"><span class="big" style="font-size:16px">${p.name}</span><span class="faint" style="text-align:right">${p.teu} TEU · ${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]}</span></div>
@@ -432,21 +472,24 @@ function renderPlayers(){
     ${r?`<div class="score"><div><b>${h2(r.h)}</b><small>on the water</small></div><div><b>${h2(p.hoursLost)}</b><small>lost waiting</small></div><div><b>${r.co2Saved.toFixed(1)} t</b><small>CO2 avoided</small></div></div>`:''}
     <ul class="tl">${p.log.slice(-6).map(l=>`<li class="past"><span class="t">${fmtT(l[0])}</span>${l[1]}</li>`).join('')}</ul></div>`; }).join('');
 }
-function tick(now){ requestAnimationFrame(tick); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.1,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
+function tick(now){ requestAnimationFrame(tick); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.1,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); sceneWatch(); placeScene(); const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
 tick._s=0;
 
 // ---------- the 3D swap scenes (built in albert-canal-vr v2, same site) ----------
 const SCENE_URL='https://alicemitakoff.github.io/albert-canal-vr/v2/';
-let sceneWasRunning=false;
-function showScene(kind,title,sub){
+let sceneFor=null, sceneOpenedAt=0;
+function placeScene(){ const box=document.getElementById('scene'); if(!box.classList.contains('on')||!sceneFor)return; const i=players.indexOf(sceneFor); const m=maps[Math.min(Math.max(0,i),maps.length-1)]; const r=m.getContainer().getBoundingClientRect(); if(maps.length===1){ box.style.cssText=''; } else { box.style.left=r.left+'px'; box.style.top=r.top+'px'; box.style.width=r.width+'px'; box.style.height=r.height+'px'; } }
+function showScene(kind,title,sub,p){
   const box=document.getElementById('scene'), f=document.getElementById('sceneF');
   document.getElementById('sceneT').textContent=title; document.getElementById('sceneS').textContent=sub||'';
-  sceneWasRunning=running; running=false; document.getElementById('pause').textContent='Resume';
+  sceneFor=p||null; sceneOpenedAt=performance.now(); placeScene();
   box.classList.add('on'); f.src=SCENE_URL+'?s='+(kind==='lock'?'lock':'berth')+'&v='+Date.now();
-  let tries=0; const tick=()=>{ tries++; try{ const d=f.contentDocument; const L=d&&d.getElementById('load'); const rs=d&&d.getElementById('replaySwap'); if(d&&rs&&!L){ const g=d.getElementById('guide'); if(g&&g.getAttribute('aria-pressed')==='true')g.click(); setTimeout(()=>rs.click(),400); return; } }catch(e){} if(tries<600)setTimeout(tick,1000); };
+  let tries=0; const tick=()=>{ tries++; try{ const d=f.contentDocument; const L=d&&d.getElementById('load'); const rs=d&&d.getElementById('replaySwap'); if(d&&rs&&!L){ const g=d.getElementById('guide'); if(g&&g.getAttribute('aria-pressed')==='true')g.click(); const hide=d.getElementById('storyFold'); setTimeout(()=>rs.click(),400); return; } }catch(e){} if(tries<600)setTimeout(tick,1000); };
   setTimeout(tick,1500);
 }
-document.addEventListener('DOMContentLoaded',()=>{ document.getElementById('sceneClose').onclick=()=>{ const box=document.getElementById('scene'); box.classList.remove('on'); document.getElementById('sceneF').src='about:blank'; if(sceneWasRunning){ running=true; document.getElementById('pause').textContent='Pause'; } }; });
+function closeScene(){ const box=document.getElementById('scene'); box.classList.remove('on'); sceneFor=null; setTimeout(()=>{ if(!box.classList.contains('on'))document.getElementById('sceneF').src='about:blank'; },600); }
+function sceneWatch(){ if(!sceneFor)return; const p=sceneFor; const shown=(performance.now()-sceneOpenedAt)/1000; if(p.state!=='hold'&&shown>75)closeScene(); if(!players.includes(p))closeScene(); }
+document.addEventListener('DOMContentLoaded',()=>{ document.getElementById('sceneClose').onclick=closeScene; window.addEventListener('resize',placeScene); });
 
 // ---------- phones: one QR code per seat, PeerJS carries the data ----------
 const SEATS=4; let host=null, seatConns={}, phoneConn=null;
@@ -498,7 +541,7 @@ async function boot(){
   document.getElementById('bOrtho').onclick=()=>{ for(const m of maps){ m.removeLayer(m._base); m._base=ORTHO().addTo(m); m._far=ESRI().addTo(m); m._far.bringToBack(); m._base.bringToBack(); } };
   document.getElementById('bOsm').onclick=()=>{ for(const m of maps){ m.removeLayer(m._base); m.removeLayer(m._far); m._base=OSM().addTo(m); m._base.bringToBack(); } };
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ const g=b.dataset.go; if(g==='all'){fitAll(maps[0]);return;} const p=llAt(+g); maps[0].setView([p[1]-(g==='51.9'?0:0.004),p[0]+0.01],g==='51.9'?15:14); maps[0]._userMoved=true; });
-  fillPlaces(); document.getElementById('pAdd').onclick=addPlayer; document.getElementById('pClear').onclick=clearPlayers;
+  fillPlaces(); document.getElementById('pAdd').onclick=addPlayer; document.querySelectorAll('#fleet button').forEach(b=>b.onclick=()=>startFleet(+b.dataset.n)); document.getElementById('pClear').onclick=clearPlayers;
   [['spd1',1],['spd2',10],['spd3',60]].forEach(([id,v])=>document.getElementById(id).onclick=e=>{ simSpeed=v; running=true; document.querySelectorAll('#clock button').forEach(b=>b.classList.toggle('on',b===e.target)); });
   document.getElementById('pause').onclick=e=>{ running=!running; e.target.textContent=running?'Pause':'Resume'; };
   requestAnimationFrame(tick);
