@@ -331,6 +331,20 @@ function drawStatic(m){
 function fitAll(m){ m.fitBounds(L.latLngBounds(C.canal.filter((p,i)=>C.km[i]<=KM_END).map(p=>[p[1],p[0]])),{paddingTopLeft:[40,130],paddingBottomRight:[maps.length===1?420:40,60]}); }
 function setLayout(n){ const box=document.getElementById('maps'); box.className=n>=3?'q4':n===2?'q2':''; const wasSplit=document.body.classList.contains('split'); document.body.classList.toggle('split',n>1); if(n>1&&!wasSplit){ document.getElementById('side').classList.add('fold'); document.getElementById('foldBtn').textContent='▴'; } if(n<=1&&wasSplit){ document.getElementById('side').classList.remove('fold'); document.getElementById('foldBtn').textContent='▾'; } while(maps.length<Math.max(1,Math.min(4,n))){ const d=document.createElement('div'); d.className='map'; d.id='map'+maps.length; d.innerHTML='<div class="tag"></div><div class="stop"></div><div class="report"></div>'; box.appendChild(d); const m=makeMap(d); maps.push(m); } while(maps.length>Math.max(1,n)){ const m=maps.pop(); m.remove(); box.lastElementChild.remove(); } setTimeout(()=>maps.forEach(m=>m.invalidateSize()),50); }
 
+// ---------- AImovation ship models: match a real AIS vessel to the closest model ----------
+const MODELS={'01':{name:'RoRo passenger ferry',len:186,beam:28},'02':{name:'RoRo freight ship',len:180,beam:32},'03':{name:'Container ship',len:230,beam:32},'04':{name:'Bulk carrier',len:180,beam:30},'05':{name:'Tanker',len:150,beam:25},'06':{name:'General cargo ship',len:120,beam:18},'07':{name:'Large cruise ship',len:330,beam:47},'08':{name:'Mid size cruise ship',len:250,beam:32},'09':{name:'Pilot boat',len:16,beam:5},'10':{name:'Electric inland container barge',len:110,beam:11},'11':{name:'Battery swap barge',len:60,beam:12}};
+function aisTypeName(t){ if(t==null)return 'type not sent'; if(t>=70&&t<=79)return 'cargo'; if(t>=80&&t<=89)return 'tanker'; if(t>=60&&t<=69)return 'passenger'; if(t===52)return 'tug'; if(t===31||t===32)return 'towing'; if(t===33)return 'dredger'; if(t===50)return 'pilot vessel'; if(t>=40&&t<=49)return 'high speed craft'; if(t===30)return 'fishing'; if(t===36||t===37)return 'pleasure craft'; if(t===0)return 'type not sent'; return 'other ('+t+')'; }
+function matchModel(sh){ const t=sh.type==null?0:sh.type, L=sh.len||0, name=(sh.name||'').toUpperCase(); let id;
+  if(t>=60&&t<=69){ id=L>280?'07':L>200?'08':L>120?'01':'09'; }
+  else if(t>=70&&t<=79){ id=/RO-?RO|FREIGHTER/.test(name)&&L>150?'02':L>200?'03':L>160?'04':L>120?'06':'10'; }
+  else if(t>=80&&t<=89){ id=L>=130?'05':L>=60?'05':'11'; }
+  else if(t===52||t===31||t===32||t===33||t===50||t===30){ id=L<30?'09':L<80?'11':'10'; }
+  else { id=!L?'10':L>=180?'04':L>=120?'06':L>=70?'10':L>=30?'11':'09'; }
+  const m=MODELS[id]; const scale=L?L/m.len:1; const why=(sh.type!=null&&sh.type!==0?'AIS type '+sh.type+', '+aisTypeName(sh.type):'no type in its AIS yet, so the typical canal barge')+(L?' · '+L+' × '+(sh.beam||'?')+' m':'');
+  return {id,name:m.name,len:m.len,scale,why,fit:Math.max(0,Math.min(1,1-Math.abs(Math.log(scale||1))))}; }
+function shipTopIcon(sh,hdg,m){ const mm=matchModel(sh); const z=m.getZoom(); const mpp=40075016.686*Math.cos(sh.lat*Math.PI/180)/Math.pow(2,z+8); const Lpx=Math.max(14,Math.min(260,(sh.len||mm.len*mm.scale||60)/mpp)); const Wpx=Lpx*((sh.beam||MODELS[mm.id].beam*mm.scale)/(sh.len||MODELS[mm.id].len*mm.scale)||0.14);
+  return L.divIcon({className:'shiptop',html:`<div style="width:${Wpx}px;height:${Lpx}px;margin:${-Lpx/2}px 0 0 ${-Wpx/2}px;transform:rotate(${hdg}deg);transform-origin:50% 50%;background:url(assets/ships/${mm.id}_top.png) center/100% 100% no-repeat;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))"></div>`,iconSize:[0,0]}); }
+
 // ---------- live vessels ----------
 let ships=[], history={}, picked=[], selected=null, liveMarkers={};
 async function loadLive(){
@@ -349,7 +363,7 @@ async function loadHistory(){
 }
 function rankVessels(){
   // the five with the best data: many history points, on the canal east of the port, with real movement
-  const score=s=>{ const h=history[s.mmsi]||[]; const moved=h.length?Math.max(...h.map(p=>p.km))-Math.min(...h.map(p=>p.km)):0; const fresh=(Date.now()-s.seen*1000)/36e5; return h.length*1.5+moved*4+(s.km>2?20:0)+(s.name?10:0)-fresh*3+(s.sog>0.5?8:0); };
+  const score=s=>{ const h=history[s.mmsi]||[]; const moved=h.length?Math.max(...h.map(p=>p.km))-Math.min(...h.map(p=>p.km)):0; const fresh=(Date.now()-s.seen*1000)/36e5; return h.length*1.5+moved*4+(s.km>2?20:0)+(s.name?10:0)+(s.len?15:0)+(s.type?10:0)-fresh*3+(s.sog>0.5?8:0); };
   picked=ships.slice().sort((a,b)=>score(b)-score(a)).slice(0,5);
 }
 function shipIcon(cls,hdg){ return L.divIcon({className:'ship '+cls,html:`<i style="transform:rotate(${hdg}deg)"></i>`,iconSize:[0,0]}); }
@@ -367,12 +381,12 @@ function drawLive(){
   for(const m of maps){ m._g.live.clearLayers(); }
   const showAll=document.getElementById('lyAll').checked;
   for(const s of ships){ const isP=picked.includes(s); if(!showAll&&!isP)continue; const hdg=(s.hdg&&s.hdg<360)?s.hdg:(s.cog&&s.cog<360&&s.sog>0.5?s.cog:bearingAt(s.km)); const stale=(Date.now()-s.seen*1000)>40*60e3; const cls=(selected&&selected.mmsi===s.mmsi?'sel ':'')+(stale?'still ':'')+(maps[0].getZoom()<12?'far':'');
-    for(const m of maps){ const mk=L.marker([s.lat,s.lon],{icon:shipIcon(cls,hdg),zIndexOffset:isP?500:100}).addTo(m._g.live); mk.bindTooltip(`<b>${s.name||'MMSI '+s.mmsi}</b><br>km ${s.km.toFixed(1)} · ${s.sog!=null?(s.sog*1.852).toFixed(1)+' km/h':''}${s.len?' · '+s.len+' × '+s.beam+' m':''}<br>${s.dest?'to '+s.dest+'<br>':''}<span class="faint">last report ${fmtT(s.seen*1000)}</span>`); mk.on('click',()=>selectVessel(s)); } }
+    for(const m of maps){ const mk=L.marker([s.lat,s.lon],{icon:m.getZoom()>=14?shipTopIcon(s,hdg,m):shipIcon(cls,hdg),zIndexOffset:isP?500:100}).addTo(m._g.live); mk.bindTooltip(`<b>${s.name||'MMSI '+s.mmsi}</b><br>km ${s.km.toFixed(1)} · ${s.sog!=null?(s.sog*1.852).toFixed(1)+' km/h':''}${s.len?' · '+s.len+' × '+s.beam+' m':''}<br>${s.dest?'to '+s.dest+'<br>':''}<span class="faint">last report ${fmtT(s.seen*1000)}</span>`); mk.on('click',()=>selectVessel(s)); } }
 }
 function renderList(){
   const box=document.getElementById('vlist'); box.innerHTML='';
   for(const s of picked){ const h=history[s.mmsi]||[]; const d=document.createElement('div'); d.className='v'+(selected&&selected.mmsi===s.mmsi?' on':''); const stale=(Date.now()-s.seen*1000)>40*60e3;
-    d.innerHTML=`<span class="dot ${stale?'off':''}"></span><span class="n">${s.name||'MMSI '+s.mmsi}</span><span class="m">km ${s.km.toFixed(1)}<br>${h.length} fixes · ${fmtT(s.seen*1000)}</span>`; d.onclick=()=>selectVessel(s); box.appendChild(d); }
+    const mm=matchModel(s); d.innerHTML=`<span class="dot ${stale?'off':''}"></span><img src="assets/ships/${mm.id}_side.png" alt="" style="width:54px;height:22px;object-fit:contain"><span class="n">${s.name||'MMSI '+s.mmsi}<br><small class="faint" style="font-weight:400">${mm.name}${s.len?' · '+s.len+' m':''}</small></span><span class="m">km ${s.km.toFixed(1)}<br>${h.length} fixes · ${fmtT(s.seen*1000)}</span>`; d.onclick=()=>selectVessel(s); box.appendChild(d); }
   if(!picked.length)box.innerHTML='<div class="faint">No vessel on the corridor in the last hours. The port end is usually busy; the canal itself goes quiet at night.</div>';
 }
 function selectVessel(s,keep){
@@ -386,7 +400,9 @@ function selectVessel(s,keep){
   for(const e of fc.events){ if(e.kind==='swap'){ const p=llAt(e.km); L.circleMarker([p[1],p[0]],{radius:9,color:'#7cc8ff',weight:3,fillColor:'#07213a',fillOpacity:.9}).addTo(m._g.sel).bindTooltip('Suggested swap',{permanent:true,direction:'top',offset:[0,-10]}); } }
   if(!keep){ const b=L.latLngBounds([[s.lat,s.lon]]); fc.path.forEach(p=>b.extend([p[1],p[0]])); trail.forEach(p=>b.extend([p.lat,p.lon])); m.fitBounds(b.pad(.3),{maxZoom:14,paddingTopLeft:[40,130],paddingBottomRight:[420,60]}); }
   const el=document.getElementById('vsel'); const dirTxt=fc.dir>0?'east, towards Meerhout and Genk':'west, towards Antwerp';
+  const mm=matchModel(s);
   el.innerHTML=`<div class="card hi"><div class="big">${s.name||'MMSI '+s.mmsi}</div><div class="kv"><b>Now</b><span>km ${s.km.toFixed(1)}, ${fc.stateTxt}</span><b>Heading</b><span>${fc.moving?dirTxt:'holding position'}</span><b>Speed</b><span>${fc.vkmh.toFixed(1)} km/h ${fc.vSrc}</span>${s.len?`<b>Size</b><span>${s.len} × ${s.beam} m</span>`:''}${s.dest?`<b>AIS destination</b><span>${s.dest}</span>`:''}<b>Fixes today</b><span>${h.length} in our history</span></div></div>
+  <div class="eyebrow">In the animation</div><div class="card" style="padding:8px 10px 10px"><img src="assets/ships/${mm.id}_hero.png" alt="" style="width:100%;height:auto;display:block"><div style="margin-top:6px"><b>${mm.name}</b>${s.len?`, scaled to ${s.len} m`:''}</div><div class="faint">Matched from its AIS: ${mm.why}. AImovation model ${mm.id}.</div></div>
   <div class="eyebrow">Last hours</div><div class="muted">${fc.pastTxt}</div>
   <div class="eyebrow">Next ${h2(fc.horizonH)}, as the twin sees it</div><ul class="tl">${fc.events.map(e=>`<li class="${e.kind}"><span class="t">${fmtT(e.t)}</span>${e.label}${e.kind==='swap'?` <button class="btn" style="padding:3px 9px;font-size:12px;margin-left:6px" onclick="showScene('${e.scene}','${(s.name||'MMSI '+s.mmsi).replace(/'/g,'')} · ${e.scene==='lock'?'tender at Kwaadmechelen lock':'berth swap at BCTN Meerhout'}','forecast ${fmtT(e.t)}')">Watch in 3D</button>`:''}</li>`).join('')}</ul>
   <div class="eyebrow">If this were the e-barge</div><div class="muted">Two 2.9 MWh ZESpacks, full at the start of this leg, ${fc.kwhKm} kWh per km loaded.</div><div class="soc">${fc.packs.map(p=>`<div><i style="width:${p}%;background:${p<=20?'var(--low)':p<60?'var(--amber)':'var(--full)'}"></i></div>`).join('')}</div><div class="faint">Charge at the end of the forecast: pack A ${fc.packs[0]}%, pack B ${fc.packs[1]}%.</div>
@@ -520,7 +536,7 @@ function showWinner(){ const fin=players.filter(p=>p.done).sort((a,b)=>b.result.
   setTimeout(()=>card.querySelectorAll('.pod').forEach(e=>e.style.height=e.dataset.h+'px'),80);
   for(let i=0;i<70;i++){ const c=document.createElement('i'); c.className='confetti'; c.style.left=Math.random()*100+'%'; c.style.background=['#3fc79a','#7cc8ff','#e8a33d','#fff','#e63946'][i%5]; c.style.animationDuration=(2.5+Math.random()*2.5)+'s'; c.style.animationDelay=(Math.random()*1.2)+'s'; card.appendChild(c); }
 }
-function finish(p){ p.done=true; p.state='done'; p.endT=simT; p.rank=players.filter(x=>x.done).length; const h=(p.endT-p.startT)/36e5; const dist=Math.abs(p.to.km-p.from.km); const kwh=dist*p.kwhKm; const diesel=kwh*DIESEL_KG_PER_KWH*CO2_PER_KG/1000, grid=kwh*GRID_G/1e6; p.result={h,dist,kwh,co2Saved:diesel-grid}; p.log.push([simT,`Arrives ${p.to.name.split(' (')[0]} after ${h2(h)}, ${h2(p.hoursLost)} lost to queues and holds`]); renderPlayers(); toast(`${p.name} arrived: ${h2(h)} on the water, ${(diesel-grid).toFixed(1)} t CO2 less than a diesel barge.`,5000); if(players.every(x=>x.done))setTimeout(showWinner,players.length>1?2500:1200); }
+function finish(p){ p.done=true; p.state='done'; p.endT=simT; p.rank=players.filter(x=>x.done).length; document.querySelectorAll('.map .report').forEach(e=>{ delete e.dataset.for; }); const h=(p.endT-p.startT)/36e5; const dist=Math.abs(p.to.km-p.from.km); const kwh=dist*p.kwhKm; const diesel=kwh*DIESEL_KG_PER_KWH*CO2_PER_KG/1000, grid=kwh*GRID_G/1e6; p.result={h,dist,kwh,co2Saved:diesel-grid}; p.log.push([simT,`Arrives ${p.to.name.split(' (')[0]} after ${h2(h)}, ${h2(p.hoursLost)} lost to queues and holds`]); renderPlayers(); toast(`${p.name} arrived: ${h2(h)} on the water, ${(diesel-grid).toFixed(1)} t CO2 less than a diesel barge.`,5000); if(players.every(x=>x.done))setTimeout(showWinner,players.length>1?2500:1200); }
 function drawGame(){
   for(const m of maps)m._g.game.clearLayers();
   players.forEach((p,i)=>{ const ll=llAt(stopDisplayKm(p)); const hdg=(bearingAt(p.km)+(p.dir<0?180:0))%360;
@@ -536,7 +552,7 @@ function renderReport(m,p){
   el.innerHTML=`<div class="card panel"><h3>${p.name} has arrived</h3><div class="route">${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]} · ${p.teu} TEU · ${fmtT(p.startT)} to ${fmtT(p.endT)}</div>
   <div class="score"><div><b>${h2(r.h)}</b><small>on the water</small></div><div><b>${h2(p.hoursLost)}</b><small>lost waiting</small></div><div><b>${r.co2Saved.toFixed(1)} t</b><small>CO2 avoided</small></div></div>
   <div class="muted" style="margin-top:10px">${p.swapped?(p.swapHow==='lock'?'Scenario 3: packs swapped by the tender during the Kwaadmechelen lock wait, no time lost.':p.swapHow==='hub'?'Scenario 1: a 30 minute stop at the charging hub, both packs swapped by the hub crane.':'Scenario 2: packs swapped at the BCTN Meerhout berth while the containers were handled, no time lost.'):'No swap on this trip.'} Arrived with ${p.packs[0]}% and ${p.packs[1]}% in the packs.</div>
-  ${players.length>1?`<div class="rank">${rank===1?'Most CO2 avoided so far':rank+(['','st','nd','rd'][rank]||'th')+' on CO2 avoided'} · ${players.filter(x=>x.done).length} of ${players.length} home</div>`:''}
+  ${players.length>1?`<div class="rank">${players.every(x=>x.done)?(rank===1?'Most CO2 avoided':rank+(['','st','nd','rd'][rank]||'th')+' on CO2 avoided'):players.filter(x=>x.done).length+' of '+players.length+' home, waiting for the others'}</div>`:''}
   <button class="btn ghost" onclick="this.closest('.report').classList.remove('on')">Back to the map</button></div>`;
   el.classList.add('on');
 }
@@ -546,7 +562,7 @@ function renderPlayers(){
     ${r?`<div class="score"><div><b>${h2(r.h)}</b><small>on the water</small></div><div><b>${h2(p.hoursLost)}</b><small>lost waiting</small></div><div><b>${r.co2Saved.toFixed(1)} t</b><small>CO2 avoided</small></div></div>`:''}
     <ul class="tl">${p.log.slice(-6).map(l=>`<li class="past"><span class="t">${fmtT(l[0])}</span>${l[1]}</li>`).join('')}</ul></div>`; }).join('');
 }
-function tick(now){ requestAnimationFrame(tick); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.5,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); sceneWatch(); placeScene(); const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
+function tick(now){ requestAnimationFrame(tick); sceneWatch(); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.5,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); placeScene(); const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
 tick._s=0;
 
 // ---------- the 3D swap scenes (built in albert-canal-vr v2, same site) ----------
@@ -554,20 +570,21 @@ const SCENE_URL='https://alicemitakoff.github.io/albert-canal-vr/v2/';
 let sceneFor=null, sceneOpenedAt=0;
 function placeScene(){ const box=document.getElementById('scene'); if(!box.classList.contains('on')||!sceneFor)return; const i=players.indexOf(sceneFor); const m=maps[Math.min(Math.max(0,i),maps.length-1)]; const r=m.getContainer().getBoundingClientRect(); if(maps.length===1){ box.style.cssText=''; } else { box.style.left=r.left+'px'; box.style.top=r.top+'px'; box.style.width=r.width+'px'; box.style.height=r.height+'px'; } }
 const SCENE_PLACE={depart:{where:'Port of Antwerp',name:'Deurganckdok',sub:'Albert Canal km 0'},hubswap:{where:'BCTN Meerhout · charging hub',name:'Meerhout',sub:'Albert Canal km 51.9 · scenario 1'},berth:{where:'BCTN Meerhout · container terminal',name:'Meerhout',sub:'Albert Canal km 51.9 · scenario 2'},lockswap:{where:'Kwaadmechelen lock · waiting berth',name:'Kwaadmechelen',sub:'Albert Canal km 52.4 · scenario 3'},lock:{where:'Lock complex',name:'Kwaadmechelen',sub:'Albert Canal km 52.4'}};
-const SCENE_AT={depart:{s:'hub',t:0},hubswap:{s:'hub',t:12},berth:{s:'berth',t:24},lockswap:{s:'lock',t:24},lock:{s:'lock',t:72}};
+const SCENE_AT={depart:{s:'hub',t:0,play:30},hubswap:{s:'hub',t:12,play:40},berth:{s:'berth',t:24,play:48},lockswap:{s:'lock',t:24,play:50},lock:{s:'lock',t:72,play:30}};
+let sceneCloseAt=0;
 function showScene(kind,title,sub,p){
   const box=document.getElementById('scene'), f=document.getElementById('sceneF');
   if(sceneFor&&sceneFor!==p&&(performance.now()-sceneOpenedAt)<20000)return;   // another vessel's scene just started: let it play
   const at=SCENE_AT[kind]||SCENE_AT.berth;
   document.getElementById('sceneT').textContent=title; document.getElementById('sceneS').textContent=sub||'';
-  sceneFor=p||null; sceneOpenedAt=performance.now(); placeScene();
+  sceneFor=p||null; sceneOpenedAt=performance.now(); sceneCloseAt=0; placeScene();
   const pl=SCENE_PLACE[kind]||SCENE_PLACE.berth; document.getElementById('slWhere').textContent=pl.where; document.getElementById('slName').textContent=pl.name; document.getElementById('slSub').textContent=(p?p.name+' · '+p.teu+' TEU · ':'')+pl.sub; document.getElementById('slVes').innerHTML=p?bargeSvg(p.id,p.packs,26,84):''; document.getElementById('sceneLoad').classList.remove('off');
-  box.classList.add('on'); f.src=SCENE_URL+'?s='+at.s+'&t='+at.t+'&cb='+Date.now();
-  let tries=0; const tick=()=>{ tries++; try{ const d=f.contentDocument; const L=d&&d.getElementById('load'); const pl=d&&d.getElementById('play'); if(d&&pl&&!L){ const g=d.getElementById('guide'); if(g&&g.getAttribute('aria-pressed')==='true')g.click(); setTimeout(()=>{ pl.click(); document.getElementById('sceneLoad').classList.add('off'); },500); return; } }catch(e){} if(tries<600)setTimeout(tick,1000); };
+  box.classList.add('on'); f.src=SCENE_URL+'?s='+at.s+'&t='+at.t+'&hide&cb='+Date.now();
+  let tries=0; const tick=()=>{ tries++; try{ const d=f.contentDocument; const L=d&&d.getElementById('load'); const pl=d&&d.getElementById('play'); if(d&&pl&&!L){ const g=d.getElementById('guide'); if(g&&g.getAttribute('aria-pressed')==='true')g.click(); setTimeout(()=>{ const sp=d.getElementById('speed'); if(sp&&sp.textContent.trim()==='1×')sp.click(); pl.click(); document.getElementById('sceneLoad').classList.add('off'); sceneCloseAt=performance.now()+at.play*1000; },500); return; } }catch(e){} if(tries<600)setTimeout(tick,1000); };
   setTimeout(tick,1500);
 }
 function closeScene(){ const box=document.getElementById('scene'); box.classList.remove('on'); sceneFor=null; setTimeout(()=>{ if(!box.classList.contains('on'))document.getElementById('sceneF').src='about:blank'; },600); }
-function sceneWatch(){ if(!sceneFor)return; const p=sceneFor; const shown=(performance.now()-sceneOpenedAt)/1000; if(p.state!=='hold'&&shown>75)closeScene(); if(!players.includes(p))closeScene(); }
+function sceneWatch(){ if(!sceneFor)return; const p=sceneFor; const shown=(performance.now()-sceneOpenedAt)/1000; if(sceneCloseAt&&performance.now()>sceneCloseAt)closeScene(); else if(shown>240)closeScene(); if(!players.includes(p))closeScene(); }
 document.addEventListener('DOMContentLoaded',()=>{ document.getElementById('sceneClose').onclick=closeScene; window.addEventListener('resize',placeScene); });
 
 // ---------- phones: one QR code per seat, PeerJS carries the data ----------
@@ -625,7 +642,7 @@ async function boot(){
   const q=new URLSearchParams(location.search);
   if(q.get('join')){ try{ C=await (await fetch('data/corridor.json?v=1')).json(); }catch(e){} phoneStart(q.get('join'),+q.get('seat')||1); return; }
   C=await (await fetch('data/corridor.json?v=1')).json();
-  setLayout(1); mainMap=maps[0]; maps[0].invalidateSize(); fitAll(maps[0]); setTimeout(()=>{maps[0].invalidateSize(); if(!maps[0]._userMoved)fitAll(maps[0]);},120); maps[0].on('dragstart',()=>{maps[0]._userMoved=true;}); maps[0].getContainer().addEventListener('wheel',()=>{maps[0]._userMoved=true;},{passive:true}); maps[0].getContainer().querySelector('.leaflet-control-zoom').addEventListener('click',()=>{maps[0]._userMoved=true;}); maps[0].on('zoomend',()=>{ if((maps[0].getZoom()<12)!==maps[0]._wasFar){ maps[0]._wasFar=maps[0].getZoom()<12; drawLive(); } });
+  setLayout(1); mainMap=maps[0]; maps[0].invalidateSize(); fitAll(maps[0]); setTimeout(()=>{maps[0].invalidateSize(); if(!maps[0]._userMoved)fitAll(maps[0]);},120); maps[0].on('dragstart',()=>{maps[0]._userMoved=true;}); maps[0].getContainer().addEventListener('wheel',()=>{maps[0]._userMoved=true;},{passive:true}); maps[0].getContainer().querySelector('.leaflet-control-zoom').addEventListener('click',()=>{maps[0]._userMoved=true;}); maps[0].on('zoomend',()=>{ drawLive(); });
   document.querySelectorAll('.tabs button[data-t]').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.tabs button[data-t]').forEach(x=>x.classList.toggle('on',x===b)); document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='sec-'+b.dataset.t)); document.getElementById('side').classList.remove('fold'); });
   document.getElementById('foldBtn').onclick=()=>{ const s=document.getElementById('side'); s.classList.toggle('fold'); document.getElementById('foldBtn').textContent=s.classList.contains('fold')?'▴':'▾'; };
   for(const [id,key] of [['lyBridges','bridges'],['lyLocks','locks'],['lyTerm','terms'],['lyLabels','labels']]){ document.getElementById(id).onchange=e=>{ for(const m of maps){ e.target.checked?m._g[key].addTo(m):m.removeLayer(m._g[key]);  } }; }
