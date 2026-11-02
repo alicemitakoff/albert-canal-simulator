@@ -195,16 +195,16 @@ body.phone-mode #scene{display:none}
   </div>
   <div id="clock" class="panel"><span class="t" id="clockT">00:00</span><span id="clockD" class="muted">Day 1</span><button id="spd1" class="on">1×</button><button id="spd2">10×</button><button id="spd3">60×</button><button id="pause">Pause</button></div>
   <div id="side" class="panel">
-    <div class="tabs"><button class="on" data-t="live">Live vessels</button><button data-t="play">Play</button><button data-t="map">Map</button><button class="fold" id="foldBtn" title="Fold">▾</button></div>
+    <div class="tabs"><button class="on" data-t="play">Play</button><button data-t="live">Live vessels</button><button data-t="map">Map</button><button class="fold" id="foldBtn" title="Fold">▾</button></div>
     <div class="body">
-      <div class="sec on" id="sec-live">
+      <div class="sec" id="sec-live">
         <div class="eyebrow">Vessels on the corridor now</div>
         <div class="faint" id="liveMeta">Loading the live AIS feed…</div>
         <div class="vlist" id="vlist"></div>
         <div id="vsel"></div>
         <div class="faint" style="margin-top:12px">Positions from AIS receivers along the canal (aisstream.io). Coverage east of Antwerp is thin and vessels can go quiet for an hour, so a vessel that has not reported for a while is shown faded. Times are Brussels time.</div>
       </div>
-      <div class="sec" id="sec-play">
+      <div class="sec on" id="sec-play">
         <div class="eyebrow">Take a vessel through the corridor</div>
         <div class="muted">Choose a route, cargo and a start time. The corridor answers with real geometry: the three lock complexes, the bridges, the hub at Meerhout and the hour of the day you leave. Up to four players share the canal; the screen splits into quadrants.</div>
         <div class="row"><input id="pName" placeholder="Vessel name" maxlength="18"></div>
