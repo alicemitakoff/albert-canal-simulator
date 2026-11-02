@@ -402,7 +402,7 @@ function showScene(kind,title,sub){
   document.getElementById('sceneT').textContent=title; document.getElementById('sceneS').textContent=sub||'';
   sceneWasRunning=running; running=false; document.getElementById('pause').textContent='Resume';
   box.classList.add('on'); f.src=SCENE_URL+'?s='+(kind==='lock'?'lock':'berth')+'&v='+Date.now();
-  let tries=0; const tick=()=>{ tries++; try{ const w=f.contentWindow; if(w&&w.started&&w.SC){ w.eval("if(typeof guided!=='undefined'&&guided)$('guide').click(); replay(Math.max(0,SC.swapT-6));"); return; } }catch(e){} if(tries<120)setTimeout(tick,500); };
+  let tries=0; const tick=()=>{ tries++; try{ const w=f.contentWindow; if(w&&w.eval("typeof started!=='undefined'&&started&&typeof SC!=='undefined'&&SC&&SC.swapT!=null")){ w.eval("if(typeof guided!=='undefined'&&guided)$('guide').click(); replay(Math.max(0,SC.swapT-6));"); return; } }catch(e){} if(tries<120)setTimeout(tick,500); };
   setTimeout(tick,1500);
 }
 document.addEventListener('DOMContentLoaded',()=>{ document.getElementById('sceneClose').onclick=()=>{ const box=document.getElementById('scene'); box.classList.remove('on'); document.getElementById('sceneF').src='about:blank'; if(sceneWasRunning){ running=true; document.getElementById('pause').textContent='Pause'; } }; });
