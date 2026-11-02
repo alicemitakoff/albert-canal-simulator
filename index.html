@@ -601,7 +601,7 @@ function renderPlayers(){
     ${r?`<div class="score"><div><b>${h2(r.h)}</b><small>on the water</small></div><div><b>${h2(p.hoursLost)}</b><small>lost waiting</small></div><div><b>${r.co2Saved.toFixed(1)} t</b><small>CO2 avoided</small></div></div>`:''}
     <ul class="tl">${p.log.slice(-6).map(l=>`<li class="past"><span class="t">${fmtT(l[0])}</span>${l[1]}</li>`).join('')}</ul></div>`; }).join('');
 }
-function tick(now){ requestAnimationFrame(tick); sceneWatch(); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.5,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*(sceneFor?Math.min(simSpeed,10):simSpeed)*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); placeScene(); if(Math.floor(now/500)!==tick._m){ tick._m=Math.floor(now/500); drawMini(); } const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
+function tick(now){ requestAnimationFrame(tick); sceneWatch(); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.5,(now-lastTick)/1000)||0; lastTick=now; const dtH=sceneFor?0:dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); placeScene(); if(Math.floor(now/500)!==tick._m){ tick._m=Math.floor(now/500); drawMini(); } const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
 tick._s=0;
 
 // ---------- mini corridor map in the middle of the split screen ----------
@@ -623,7 +623,7 @@ const SCENE_URL='https://alicemitakoff.github.io/albert-canal-vr/v2/';
 let sceneFor=null, sceneOpenedAt=0;
 function placeScene(){ const box=document.getElementById('scene'); if(!box.classList.contains('on')||!sceneFor)return; const i=players.indexOf(sceneFor); const m=maps[Math.min(Math.max(0,i),maps.length-1)]; const r=m.getContainer().getBoundingClientRect(); if(maps.length===1){ box.style.cssText=''; } else { box.style.left=r.left+'px'; box.style.top=r.top+'px'; box.style.width=r.width+'px'; box.style.height=r.height+'px'; } }
 const SCENE_PLACE={depart:{where:'Port of Antwerp',name:'Deurganckdok',sub:'Albert Canal km 0'},hubswap:{where:'BCTN Meerhout · charging hub',name:'Meerhout',sub:'Albert Canal km 51.9 · scenario 1'},berth:{where:'BCTN Meerhout · container terminal',name:'Meerhout',sub:'Albert Canal km 51.9 · scenario 2'},lockswap:{where:'Kwaadmechelen lock · waiting berth',name:'Kwaadmechelen',sub:'Albert Canal km 52.4 · scenario 3'},lock:{where:'Lock complex',name:'Kwaadmechelen',sub:'Albert Canal km 52.4'}};
-const SCENE_AT={depart:{s:'hub',t:0,play:30},hubswap:{s:'hub',t:12,play:40},berth:{s:'berth',t:24,play:48},lockswap:{s:'lock',t:24,play:50},lock:{s:'lock',t:72,play:30}};
+const SCENE_AT={depart:{s:'hub',t:0,play:30},hubswap:{s:'hub',t:16,play:19},berth:{s:'berth',t:30,play:22},lockswap:{s:'lock',t:28,play:24},lock:{s:'lock',t:72,play:28}};
 let sceneCloseAt=0;
 function showScene(kind,title,sub,p){
   const box=document.getElementById('scene'), f=document.getElementById('sceneF');
