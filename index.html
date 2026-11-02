@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta http-equiv="Cache-Control" content="no-cache">
 <title>Albert Canal corridor · NatPower Digital × CMA CGM</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
@@ -46,8 +46,17 @@ body.split .map .stop h4{font-size:12.5px}
 .map .report .kv{margin:10px 0}
 .map .report .rank{color:var(--brass);font-weight:700;margin-top:8px}
 .map .report .btn{margin-top:10px}
+#miniWrap{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:650;display:none;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+body.split #miniWrap{display:flex}
+#miniBtn{width:46px;height:46px;border-radius:50%;border:2px solid #fff;background:var(--brass);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.5);pointer-events:auto;cursor:pointer;transition:transform .25s}
+#miniBtn:hover{transform:scale(1.08)}
+#miniBtn img{height:26px;display:block}
+#miniMap{width:520px;max-width:46vw;padding:8px 10px 6px;pointer-events:auto;opacity:0;transform:scale(.9);transition:opacity .3s,transform .3s;display:none}
+#miniMap.on{display:block;opacity:1;transform:none}
+#miniMap canvas{width:100%;height:auto;display:block}
 #winner{position:fixed;inset:0;z-index:800;display:flex;align-items:center;justify-content:center;background:rgba(5,18,36,.78);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .8s ease}
 #winner.on{opacity:1;pointer-events:auto}
+#winner:not(.on) *{pointer-events:none}
 #winner .card{width:min(92vw,620px);padding:28px 30px;text-align:center;position:relative;overflow:hidden}
 #winner h2{margin:0;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
 #winner h1{margin:6px 0 2px;font-size:34px}
@@ -214,7 +223,25 @@ body.phone-mode #scene{display:none}
 @media (max-width:900px){#scene{right:0}}
 #toast{position:absolute;left:calc(50% - 202px);bottom:40px;transform:translateX(-50%);padding:9px 14px;font-size:13px;opacity:0;transition:opacity .3s;max-width:70vw;text-align:center}
 #toast.on{opacity:1}
-@media (max-width:900px){#side{width:min(372px,calc(100vw - 32px))}#title{max-width:calc(100vw - 32px)}}
+@media (max-width:900px){
+  #side{left:0;right:0;top:auto;bottom:0;width:auto;max-height:58vh;border-radius:16px 16px 0 0}
+  #side.fold{max-height:none}
+  #title{left:10px;top:10px;max-width:calc(100vw - 20px);padding:8px 12px}
+  #title h1{font-size:15px}#title .sub{display:none}
+  #clock{left:50%;top:auto;bottom:calc(58vh + 10px);padding:6px 10px;gap:8px;font-size:12px}
+  #clock .t{font-size:16px;min-width:48px}
+  body.split #clock{bottom:16px}
+  #legend{display:none}
+  #toast{left:50%;bottom:calc(58vh + 50px);max-width:90vw}
+  .picker{grid-template-columns:1fr 1fr}
+  .seats{grid-template-columns:1fr 1fr 1fr 1fr}
+  #scene{width:100%;height:calc(100% - 58vh)}
+  #maps.q4{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr)}
+  #maps.q2{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  body.split #side{max-height:40vh}
+  body.split #title{display:none}
+  #miniMap{max-width:92vw}
+}
 </style>
 </head>
 <body>
@@ -239,6 +266,7 @@ body.phone-mode #scene{display:none}
       <div class="sec on" id="sec-play">
         <div class="eyebrow">1 · Pick your vessel</div>
         <div class="picker" id="picker"></div>
+        <div class="faint" id="pickNote">Tap more than one to send several vessels at once.</div>
         <div class="row"><select id="pReal"><option value="">Or take a real vessel from the live feed…</option></select></div>
         <div class="faint" id="pRealNote"></div>
         <div class="eyebrow">2 · Route and departure</div>
@@ -278,6 +306,7 @@ body.phone-mode #scene{display:none}
   <div id="toast" class="panel"></div>
 </div>
 <div id="winner"><div class="card panel" id="winnerCard"></div></div>
+<div id="miniWrap"><button id="miniBtn" title="Corridor overview"><img src="assets/brand/digital-d.svg" alt="D"></button><div id="miniMap" class="panel"><canvas id="miniCv" width="520" height="190"></canvas></div></div>
 <div id="scene"><div class="bar"><b id="sceneT">Battery swap</b><span id="sceneS" class="muted"></span><span class="sp"></span><button class="x" id="sceneClose">Back to the map</button></div><iframe id="sceneF" allow="xr-spatial-tracking; fullscreen" title="3D swap scene"></iframe><div id="sceneLoad"><div class="where" id="slWhere"></div><h2 id="slName"></h2><div class="sub" id="slSub"></div><div class="ves" id="slVes"></div><div class="ln"><i></i></div></div>
 
 </div>
@@ -333,7 +362,7 @@ function drawStatic(m){
   for(const t of C.terminals){ const mk=L.circleMarker([t.ll[1],t.ll[0]],{radius:6,color:'#000',weight:1,fillColor:'#7cc8ff',fillOpacity:1}).addTo(g.terms); mk.bindPopup(`<b>${t.name}</b><br>${t.op||''}`); }
   for(const h of C.hubs){ if(h.id==='genk')continue; const isMeer=Math.abs(h.km-52)<2; const p=isMeer?[5.0935,51.1035]:[h.ll[0],h.ll[1]]; const mk=L.circleMarker([p[1],p[0]],{radius:8,color:'#fff',weight:2,fillColor:'#7cc8ff',fillOpacity:.95}).addTo(g.terms); mk.bindPopup(`<b>${isMeer?'BCTN Meerhout charging hub':h.name}</b><br>${h.role}<br><span class="badge eaas">EaaS</span> charging as a service${isMeer?'<br><a href="https://alicemitakoff.github.io/albert-canal-vr/v2/" target="_blank" style="color:#7cc8ff">Open the 3D hub scene</a>':''}`); L.marker([p[1],p[0]],{icon:L.divIcon({className:'lbl',html:isMeer?'BCTN Meerhout hub':h.name,iconAnchor:[-12,-4]}),interactive:false}).addTo(g.labels); }
 }
-function fitAll(m){ m.fitBounds(L.latLngBounds(C.canal.filter((p,i)=>C.km[i]<=KM_END).map(p=>[p[1],p[0]])),{paddingTopLeft:[40,130],paddingBottomRight:[maps.length===1?420:40,60]}); }
+function fitAll(m){ const narrow=window.innerWidth<900; m.fitBounds(L.latLngBounds(C.canal.filter((p,i)=>C.km[i]<=KM_END).map(p=>[p[1],p[0]])),narrow?{paddingTopLeft:[10,70],paddingBottomRight:[10,Math.round(window.innerHeight*0.58)+10]}:{paddingTopLeft:[40,130],paddingBottomRight:[maps.length===1?420:40,60]}); }
 function setLayout(n){ const box=document.getElementById('maps'); box.className=n>=3?'q4':n===2?'q2':''; const wasSplit=document.body.classList.contains('split'); document.body.classList.toggle('split',n>1); if(n>1&&!wasSplit){ document.getElementById('side').classList.add('fold'); document.getElementById('foldBtn').textContent='▴'; } if(n<=1&&wasSplit){ document.getElementById('side').classList.remove('fold'); document.getElementById('foldBtn').textContent='▾'; } while(maps.length<Math.max(1,Math.min(4,n))){ const d=document.createElement('div'); d.className='map'; d.id='map'+maps.length; d.innerHTML='<div class="tag"></div><div class="stop"></div><div class="report"></div>'; box.appendChild(d); const m=makeMap(d); maps.push(m); } while(maps.length>Math.max(1,n)){ const m=maps.pop(); m.remove(); box.lastElementChild.remove(); } setTimeout(()=>maps.forEach(m=>m.invalidateSize()),50); }
 
 // ---------- AImovation ship models: match a real AIS vessel to the closest model ----------
@@ -458,15 +487,16 @@ function forecast(s,trail){
 const PLACES=[{id:'antwerp',name:'Antwerp (Deurganckdok gate)',km:0},{id:'wijnegem',name:'Wijnegem',km:9.74},{id:'olen',name:'Olen',km:33.81},{id:'meerhout',name:'BCTN Meerhout',km:HUB_KM},{id:'ham',name:'Ham (km 60)',km:60},{id:'end',name:'Corridor end, km 72',km:72}];
 let players=[], simT=null, simSpeed=1, running=true, lastTick=0, dayStart=null;
 const VESSELS=[{name:'Albatros',teu:150,swap:'hub',tag:'scenario 1 · swap at the hub'},{name:'Canal Dream',teu:208,swap:'call',tag:'scenario 2 · swap at the berth'},{name:'Meerhout Express',teu:96,swap:'pass',tag:'scenario 3 · tender at the lock'},{name:'Blue Pack',teu:342,swap:'call',tag:'scenario 2 · swap at the berth'}];
-let picked_v=0;
+let picked_v=0; let pickedSet=new Set([0]);
 let realPick=null;
 function renderRealPick(){ const sel=document.getElementById('pReal'); if(!sel)return; const cur=sel.value; sel.innerHTML='<option value="">Or take a real vessel from the live feed…</option>'+ships.filter(x=>x.name&&x.km>0.3&&(!x.len||x.len>=38)&&!/TUG|PILOT|LOODS/.test(x.name)).sort((a,b)=>a.km-b.km).map(x=>`<option value="${x.mmsi}">${x.name} · km ${x.km.toFixed(1)}${x.len?' · '+x.len+' m':''} · ${matchModel(x).name}</option>`).join(''); sel.value=cur; }
-function renderPicker(){ const box=document.getElementById('picker'); if(!box)return; box.innerHTML=VESSELS.map((v,i)=>{ const taken=players.some(p=>p.id===i); return `<div class="pick ${i===picked_v?'on':''} ${taken?'taken':''}" data-i="${i}">${bargeSvg(i,[100,100],16,50)}<div><b>${v.name}</b><small>${v.teu} TEU · ${v.tag}</small></div></div>`; }).join('');
-  box.querySelectorAll('.pick').forEach(e=>e.onclick=()=>{ if(e.classList.contains('taken'))return; realPick=null; const rs=document.getElementById('pReal'); if(rs)rs.value=''; document.getElementById('pRealNote').textContent=''; picked_v=+e.dataset.i; const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; document.getElementById('pSwap').value=v.swap; renderPicker(); }); const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; }
-function fillPlaces(){ renderPicker(); for(const id of ['pFrom','pTo']){ const s=document.getElementById(id); s.innerHTML=PLACES.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); } document.getElementById('pTo').value='meerhout'; const free=VESSELS.findIndex((v,i)=>!players.some(p=>p.id===i)); if(free>=0&&players.some(p=>p.id===picked_v)){ picked_v=free; renderPicker(); } }
+function renderPicker(){ const box=document.getElementById('picker'); if(!box)return; box.innerHTML=VESSELS.map((v,i)=>{ const taken=players.some(p=>p.id===i); return `<div class="pick ${pickedSet.has(i)?'on':''} ${taken?'taken':''}" data-i="${i}">${bargeSvg(i,[100,100],16,50)}<div><b>${v.name}</b><small>${v.teu} TEU · ${v.tag}</small></div></div>`; }).join('');
+  box.querySelectorAll('.pick').forEach(e=>e.onclick=()=>{ if(e.classList.contains('taken'))return; realPick=null; const rs=document.getElementById('pReal'); if(rs)rs.value=''; document.getElementById('pRealNote').textContent=''; const i=+e.dataset.i; if(pickedSet.has(i)&&pickedSet.size>1)pickedSet.delete(i); else pickedSet.add(i); picked_v=[...pickedSet][0]; const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; document.getElementById('pSwap').value=v.swap; document.getElementById('pAdd').textContent=pickedSet.size>1?'OK, set sail with '+pickedSet.size+' vessels':'OK, set sail'; document.getElementById('pickNote').textContent=pickedSet.size>1?'Several vessels: each sails its own preset route, departure and scenario, so you can watch them move together.':'Tap more than one to send several vessels at once.'; renderPicker(); }); const v=VESSELS[picked_v]; document.getElementById('pName').value=v.name; document.getElementById('pTeu').value=v.teu; }
+function fillPlaces(){ renderPicker(); for(const id of ['pFrom','pTo']){ const s=document.getElementById(id); s.innerHTML=PLACES.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); } document.getElementById('pTo').value='meerhout'; for(const i of [...pickedSet])if(players.some(p=>p.id===i))pickedSet.delete(i); if(!pickedSet.size){ const free=VESSELS.findIndex((v,i)=>!players.some(p=>p.id===i)); if(free>=0)pickedSet.add(free); } picked_v=[...pickedSet][0]||0; renderPicker(); }
 function congestion(hourOfDay,km){ // lock queue in hours by time of day: Asif's example, 11:00 adds an hour, 07:00 saves one
   const base=hourOfDay>=10&&hourOfDay<16?1.0:hourOfDay>=6&&hourOfDay<9?0.1:hourOfDay>=20||hourOfDay<5?0.3:0.5; return base; }
 function addPlayer(){
+  if(!realPick&&pickedSet.size>1){ let n=0; for(const i of [...pickedSet]){ if(players.some(p=>p.id===i))continue; if(addPlayerCfg(Object.assign({},FLEET[i]),null))n++; } pickedSet=new Set(); const free=VESSELS.findIndex((v,i)=>!players.some(p=>p.id===i)); if(free>=0)pickedSet.add(free); picked_v=[...pickedSet][0]||0; document.getElementById('pAdd').textContent='OK, set sail'; renderPicker(); if(n)document.getElementById('spd2').click(); return; }
   if(!realPick&&players.some(p=>p.id===picked_v)){ toast('That vessel is already on the canal. Pick another one.'); return; }
   const cfg={from:document.getElementById('pFrom').value,to:document.getElementById('pTo').value,teu:+document.getElementById('pTeu').value,startH:+document.getElementById('pStart').value,swapPlan:document.getElementById('pSwap').value,name:document.getElementById('pName').value.trim(),vid:realPick?null:picked_v};
   if(realPick){ cfg.real={mmsi:realPick.mmsi,km:realPick.km,model:matchModel(realPick).id,len:realPick.len||90,beam:realPick.beam||11}; cfg.from='real'; cfg.name=realPick.name; }
@@ -488,7 +518,7 @@ function addPlayerCfg(cfg,seat){
 }
 const FLEET=[{vid:0,name:'Albatros',from:'antwerp',to:'end',teu:150,startH:7,swapPlan:'hub'},{vid:1,name:'Canal Dream',from:'antwerp',to:'end',teu:208,startH:11,swapPlan:'call'},{vid:2,name:'Meerhout Express',from:'antwerp',to:'ham',teu:96,startH:5,swapPlan:'pass'},{vid:3,name:'Blue Pack',from:'wijnegem',to:'meerhout',teu:342,startH:15,swapPlan:'call'}];
 function startFleet(n){ clearPlayers(); for(let i=0;i<n;i++)addPlayerCfg(FLEET[i],null); document.getElementById('spd2').click(); toast(n===1?'One vessel on the canal, full screen.':n+' vessels on the canal, the screen is split.'); }
-function clearPlayers(){ document.getElementById('winner').classList.remove('on'); document.getElementById('legend').style.display=''; players=[]; dayStart=null; simT=null; setLayout(1); for(const m of maps)m._g.game.clearLayers(); renderPlayers(); document.getElementById('clock').classList.remove('on'); fillPlaces(); }
+function clearPlayers(){ pickedSet=new Set([0]); picked_v=0; document.getElementById('pAdd').textContent='OK, set sail'; document.getElementById('winner').classList.remove('on'); document.getElementById('legend').style.display=''; players=[]; dayStart=null; simT=null; setLayout(1); for(const m of maps)m._g.game.clearLayers(); renderPlayers(); document.getElementById('clock').classList.remove('on'); fillPlaces(); }
 // ---------- every stop is a scene: zoom to the place and play the sequence ----------
 const STOPS={
   lock:(l)=>({title:l.name+' lock, km '+l.km+(lockChamber(l)&&!/albertkanaal/i.test(lockChamber(l).name)?' · '+lockChamber(l).name:''),steps:['Approach the lower gate','Moor in the chamber','Gates close behind the barge','Chamber fills, lift '+l.lift+' m','Upper gates open','Sail on at the higher level'],zoom:17,lift:l.lift}),
@@ -550,7 +580,7 @@ function drawGame(){
   for(const m of maps)m._g.game.clearLayers();
   players.forEach((p,i)=>{ const ll=llAt(stopDisplayKm(p)); const hdg=(bearingAt(p.km)+(p.dir<0?180:0))%360;
     for(const m of maps){ const z=m.getZoom(); if(p.state==='sail')L.marker([ll[1],ll[0]],{icon:wakeIcon(hdg,z),interactive:false,zIndexOffset:800}).addTo(m._g.game); const mk=L.marker([ll[1],ll[0]],{icon:p.real?shipTopIcon({lat:ll[1],len:p.real.len,beam:p.real.beam,type:0,name:p.name,_m:p.real.model},hdg,m):bargeIcon(p.id,p.packs,hdg,z),zIndexOffset:900}).addTo(m._g.game); mk.bindTooltip(`<b>${p.name}</b> · ${p.teu} TEU · km ${p.km.toFixed(1)}<br>${p.state==='hold'?'holding':p.state==='wait'?'waiting to leave':p.state==='done'?'arrived':'under way'} · packs ${p.packs[0]}% / ${p.packs[1]}%`,{permanent:true,direction:'right',offset:[22,0]}); }
-    const m=maps[Math.min(i,maps.length-1)]; if(maps.length>1||players.length===1){ const tag=m.getContainer().querySelector('.tag'); if(tag)tag.innerHTML=`<b>${p.name}</b> · ${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]}`; if(!m._userMoved&&!(p.stop&&p.state==='hold')){ const z=m.getZoom()<12?13:m.getZoom(); const pt=m.project([ll[1],ll[0]],z).add(L.point(maps.length===1?190:0,30)); m.setView(m.unproject(pt,z),z,{animate:true,duration:.8}); } renderStop(m,p); renderReport(m,p); } });
+    const m=maps[Math.min(i,maps.length-1)]; if(maps.length>1||players.length===1){ const tag=m.getContainer().querySelector('.tag'); if(tag)tag.innerHTML=`<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.real?'#fff':LIVERY_HEX[p.id%4]};margin-right:7px;vertical-align:middle"></span><b>${p.name}</b> · ${p.from.name.split(' (')[0]} → ${p.to.name.split(' (')[0]}`; if(!m._userMoved&&!(p.stop&&p.state==='hold')){ const z=m.getZoom()<12?13:m.getZoom(); const pt=m.project([ll[1],ll[0]],z).add(L.point(maps.length===1?190:0,30)); m.setView(m.unproject(pt,z),z,{animate:true,duration:.8}); } renderStop(m,p); renderReport(m,p); } });
 }
 function renderReport(m,p){
   const el=m.getContainer().querySelector('.report'); if(!el)return;
@@ -571,8 +601,22 @@ function renderPlayers(){
     ${r?`<div class="score"><div><b>${h2(r.h)}</b><small>on the water</small></div><div><b>${h2(p.hoursLost)}</b><small>lost waiting</small></div><div><b>${r.co2Saved.toFixed(1)} t</b><small>CO2 avoided</small></div></div>`:''}
     <ul class="tl">${p.log.slice(-6).map(l=>`<li class="past"><span class="t">${fmtT(l[0])}</span>${l[1]}</li>`).join('')}</ul></div>`; }).join('');
 }
-function tick(now){ requestAnimationFrame(tick); sceneWatch(); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.5,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); placeScene(); const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
+function tick(now){ requestAnimationFrame(tick); sceneWatch(); if(!players.length||!running||!simT||players.every(p=>p.done))return; const dt=Math.min(0.5,(now-lastTick)/1000)||0; lastTick=now; const dtH=dt*simSpeed*(1/60); /* 1× = one real second is one sim minute */ simT+=dtH*36e5; stepGame(dtH); drawGame(); placeScene(); if(Math.floor(now/500)!==tick._m){ tick._m=Math.floor(now/500); drawMini(); } const d=new Date(simT); document.getElementById('clockT').textContent=fmtT(simT); document.getElementById('clockD').textContent='Day '+(Math.floor((simT-dayStart.getTime())/864e5)+1)+' · '+d.toLocaleDateString('en-GB',{weekday:'long'}); if(Math.floor(now/1000)!==tick._s){ tick._s=Math.floor(now/1000); renderPlayers(); } }
 tick._s=0;
+
+// ---------- mini corridor map in the middle of the split screen ----------
+const LIVERY_HEX=['#7cc8ff','#f4a261','#3fc79a','#e63946'];
+function drawMini(){ const cv=document.getElementById('miniCv'); const box=document.getElementById('miniMap'); if(!box.classList.contains('on')||!C)return; const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height; ctx.clearRect(0,0,W,H);
+  const pts=C.canal.filter((p,i)=>C.km[i]<=KM_END); const lons=pts.map(p=>p[0]),lats=pts.map(p=>p[1]); const x0=Math.min(...lons),x1=Math.max(...lons),y0=Math.min(...lats),y1=Math.max(...lats); const pad=22; const sx=(W-2*pad)/(x1-x0), sy=(H-2*pad-14)/(y1-y0); const sc=Math.min(sx,sy*1.0); const cx=p=>pad+(p[0]-x0)*sc*(sx/sc>1?1:1), cy=p=>pad+(y1-p[1])*sy;
+  const X=p=>pad+(p[0]-x0)*(W-2*pad)/(x1-x0), Y=p=>pad+8+(y1-p[1])*(H-2*pad-16)/(y1-y0);
+  ctx.lineWidth=4; ctx.strokeStyle='rgba(91,184,230,.9)'; ctx.lineCap='round'; ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(X(p),Y(p)):ctx.moveTo(X(p),Y(p))); ctx.stroke();
+  ctx.font='11px Arial'; ctx.fillStyle='#c5d3e4'; ctx.textAlign='center';
+  for(const l of C.locks){ if(l.km>KM_END)continue; const p=llAt(l.km); ctx.fillStyle='#e8a33d'; ctx.fillRect(X(p)-4,Y(p)-4,8,8); ctx.fillStyle='#c5d3e4'; ctx.fillText(l.name,X(p),Y(p)-9); }
+  { const p=llAt(HUB_KM); ctx.fillStyle='#7cc8ff'; ctx.beginPath(); ctx.arc(X(p),Y(p),5,0,7); ctx.fill(); ctx.fillStyle='#c5d3e4'; ctx.fillText('BCTN Meerhout',X(p),Y(p)+18); }
+  { const p=llAt(0); ctx.fillStyle='#c5d3e4'; ctx.fillText('Antwerp',X(p)+10,Y(p)+16); const q=llAt(KM_END); ctx.fillText('km 72',X(q)-6,Y(q)+16); }
+  players.forEach((p,i)=>{ const ll=llAt(stopDisplayKm(p)); const col=p.real?'#ffffff':LIVERY_HEX[p.id%4]; ctx.beginPath(); ctx.arc(X(ll),Y(ll),7,0,7); ctx.fillStyle=col; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle='#0b1e33'; ctx.stroke(); ctx.fillStyle='#fff'; ctx.font='bold 11px Arial'; ctx.fillText(p.name,X(ll),Y(ll)-11); ctx.font='11px Arial'; });
+}
+document.addEventListener('DOMContentLoaded',()=>{ document.getElementById('miniBtn').onclick=()=>{ const b=document.getElementById('miniMap'); b.classList.toggle('on'); drawMini(); }; });
 
 // ---------- the 3D swap scenes (built in albert-canal-vr v2, same site) ----------
 const SCENE_URL='https://alicemitakoff.github.io/albert-canal-vr/v2/';
