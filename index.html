@@ -24,12 +24,9 @@ select option{background:#0b1e33}
 .map{position:relative;background:#0a1a2c}
 .map .tag{position:absolute;left:10px;top:10px;z-index:500;background:var(--glass);border:1px solid var(--hair-cool);border-radius:10px;padding:6px 10px;font-size:13px;pointer-events:none}
 .map .tag b{color:var(--brass)}
-.gauge{display:inline-flex;align-items:center;gap:4px;margin-left:10px;vertical-align:middle}
-.gauge span{width:34px;height:8px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;display:inline-block}
-.gauge span i{display:block;height:100%;transition:width .4s}
-.gauge b{color:var(--ivory)!important;font-size:11px;margin-left:4px;font-weight:400}
-.gauge.small span{width:26px;height:6px}
-#scene .bar .gauge{margin-left:0}#scene .bar .gauge span{width:60px;height:10px}#scene .bar .gauge b{font-size:13px}
+.gauge{display:inline-flex;align-items:center;gap:5px;margin-left:10px;vertical-align:middle}
+.gauge .bat{display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+#scene .bar .gauge{margin-left:0;transform:scale(1.35);transform-origin:left center;margin-right:24px}
 .map .stop{position:absolute;left:10px;bottom:14px;z-index:500;background:var(--glass-strong);border:1px solid var(--hair-cool);border-radius:12px;padding:10px 12px;font-size:12.5px;max-width:340px;pointer-events:none}
 .map .stop{opacity:0;transition:opacity .4s ease;display:block}
 .map .stop.on{opacity:1}
@@ -631,7 +628,9 @@ let sceneFor=null, sceneOpenedAt=0;
 function placeScene(){ const box=document.getElementById('scene'); if(!box.classList.contains('on')||!sceneFor)return; const i=players.indexOf(sceneFor); const m=maps[Math.min(Math.max(0,i),maps.length-1)]; const r=m.getContainer().getBoundingClientRect(); if(maps.length===1){ box.style.cssText=''; } else { box.style.left=r.left+'px'; box.style.top=r.top+'px'; box.style.width=r.width+'px'; box.style.height=r.height+'px'; } }
 const SCENE_PLACE={depart:{where:'Port of Antwerp',name:'Deurganckdok',sub:'Albert Canal km 0'},hubswap:{where:'BCTN Meerhout · charging hub',name:'Meerhout',sub:'Albert Canal km 51.9 · scenario 1'},berth:{where:'BCTN Meerhout · container terminal',name:'Meerhout',sub:'Albert Canal km 51.9 · scenario 2'},lockswap:{where:'Kwaadmechelen lock · waiting berth',name:'Kwaadmechelen',sub:'Albert Canal km 52.4 · scenario 3'},lock:{where:'Lock complex',name:'Kwaadmechelen',sub:'Albert Canal km 52.4'}};
 function dispPacks(p){ if(p.swapT1&&performance.now()<p.swapT1){ const f=Math.max(0,Math.min(1,(performance.now()-p.swapT0)/(p.swapT1-p.swapT0))); const e=1-Math.pow(1-f,2); return p.swapFrom.map(x=>Math.round(x+(100-x)*e)); } return p.packs; }
-function gauge(packs,small){ const pc=x=>x<=20?'var(--low)':x<60?'var(--amber)':'var(--full)'; return `<span class="gauge ${small?'small':''}">${packs.map(x=>`<span><i style="width:${x}%;background:${pc(x)}"></i></span>`).join('')}<b>${packs[0]}% · ${packs[1]}%</b></span>`; }
+function gauge(packs,small){ const pc=x=>x<=20?'#e5534b':x<60?'#e8a33d':'#3fc79a'; const W=small?46:56,H=small?20:24;
+  const bat=(x,l)=>`<svg class="bat" viewBox="0 0 ${W+5} ${H}" width="${W+5}" height="${H}"><rect x="0.75" y="0.75" width="${W-1.5}" height="${H-1.5}" rx="3" fill="rgba(0,0,0,.35)" stroke="#fff" stroke-width="1.5"/><rect x="${W+1}" y="${H*0.3}" width="3.5" height="${H*0.4}" rx="1" fill="#fff"/><rect x="3" y="3" width="${Math.max(0,(W-6)*x/100)}" height="${H-6}" rx="1.5" fill="${pc(x)}"/><text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="${small?10.5:12}" font-weight="700" fill="#fff" style="paint-order:stroke;stroke:#000;stroke-width:2px">${x}%</text></svg>`;
+  return `<span class="gauge ${small?'small':''}">${bat(packs[0],'A')}${bat(packs[1],'B')}</span>`; }
 const SCENE_AT={depart:{s:'hub',t:0,play:30},hubswap:{s:'hub',t:16,play:19},berth:{s:'berth',t:30,play:22},lockswap:{s:'lock',t:28,play:24},lock:{s:'lock',t:72,play:28}};
 let sceneCloseAt=0;
 function showScene(kind,title,sub,p){
