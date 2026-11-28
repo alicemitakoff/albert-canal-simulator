@@ -1,0 +1,212 @@
+{"mmsi":"205002000","name":"VB SHARK","lat":51.281135,"lon":4.251322,"sog":0,"cog":109.2,"hdg":304,"seen":1795766586,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205020000","name":"ALBATROS","lat":51.249463,"lon":4.307187,"sog":0,"cog":193.3,"hdg":511,"seen":1795766523,"type":33,"dest":"WALSOORDEN","len":22,"beam":5}
+{"mmsi":"205043700","name":"MRB34","lat":51.225145,"lon":4.392882,"sog":0,"cog":0,"hdg":511,"seen":1795766534,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205045800","name":"BREITLING","lat":51.271607,"lon":4.353228,"sog":0,"cog":132.7,"hdg":511,"seen":1795766646,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205056100","name":null,"lat":51.22878,"lon":4.407837,"sog":0,"cog":360,"hdg":511,"seen":1795766677,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205085300","name":"SOMTRANS XI","lat":51.267935,"lon":4.331923,"sog":0,"cog":360,"hdg":511,"seen":1795766486,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205099000","name":"PIETER COECKE","lat":51.298172,"lon":4.269412,"sog":1.8,"cog":232.4,"hdg":234,"seen":1795766654,"type":33,"dest":"BEANT","len":32,"beam":12}
+{"mmsi":"205105000","name":"NEPTUNE","lat":51.251023,"lon":4.358582,"sog":0.1,"cog":360,"hdg":511,"seen":1795766456,"type":54,"dest":"401","len":15,"beam":7}
+{"mmsi":"205203590","name":"MANHATTAN","lat":51.249875,"lon":4.389873,"sog":0,"cog":360,"hdg":511,"seen":1795766400,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205215590","name":"WARRIOR","lat":51.239958,"lon":4.473862,"sog":0,"cog":360,"hdg":511,"seen":1795766653,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205218590","name":"DW ANTWERPEN","lat":51.251363,"lon":4.36109,"sog":0,"cog":360,"hdg":511,"seen":1795766565,"type":89,"dest":"ANTWERPEN  ASIADOK","len":28,"beam":6}
+{"mmsi":"205231590","name":"MARNIX VST ALDEGONDE","lat":51.224545,"lon":4.393013,"sog":3.3,"cog":232,"hdg":214,"seen":1795766637,"type":69,"dest":"VEERDIENST LO","len":30,"beam":10}
+{"mmsi":"205235570","name":null,"lat":51.233108,"lon":4.41568,"sog":0,"cog":242,"hdg":511,"seen":1795766443,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205246890","name":"WILLEM","lat":51.054772,"lon":4.362822,"sog":2.9,"cog":0.6,"hdg":511,"seen":1795766612,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205252290","name":"DW 3","lat":51.266922,"lon":4.26422,"sog":0.2,"cog":67.8,"hdg":511,"seen":1795766581,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205256110","name":null,"lat":51.234538,"lon":4.415678,"sog":0,"cog":355.4,"hdg":511,"seen":1795766561,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205262290","name":"NAVIS","lat":51.290777,"lon":4.257205,"sog":0,"cog":342.4,"hdg":213,"seen":1795766512,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205270290","name":"POA 1","lat":51.309567,"lon":4.32297,"sog":0,"cog":150.3,"hdg":333,"seen":1795766639,"type":53,"dest":"ANTWERP","len":25,"beam":6}
+{"mmsi":"205271690","name":"DUNE","lat":51.255658,"lon":4.379118,"sog":0,"cog":360,"hdg":511,"seen":1795766616,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205274690","name":"ECHODRONE","lat":51.312642,"lon":4.32145,"sog":0,"cog":360,"hdg":511,"seen":1795766510,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205280000","name":"TUG 55","lat":51.312133,"lon":4.320458,"sog":0,"cog":179,"hdg":511,"seen":1795766678,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205285000","name":"TUG 53","lat":51.252608,"lon":4.355483,"sog":0.1,"cog":257.9,"hdg":240,"seen":1795766650,"type":52,"dest":"","len":25,"beam":13}
+{"mmsi":"205285690","name":"RETRO","lat":51.238497,"lon":4.457533,"sog":0,"cog":360,"hdg":511,"seen":1795766618,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205298590","name":"ROSE DES SABLES","lat":51.111152,"lon":4.298818,"sog":0,"cog":245.1,"hdg":511,"seen":1795766647,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205305890","name":"FLANDRIA24","lat":51.23648,"lon":4.418125,"sog":0,"cog":241.9,"hdg":511,"seen":1795766432,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205307900","name":"ASHERAT","lat":51.216728,"lon":4.38498,"sog":0,"cog":360,"hdg":511,"seen":1795766596,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205312390","name":"WINDECK","lat":51.2388,"lon":4.45924,"sog":0,"cog":43,"hdg":511,"seen":1795766547,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205329000","name":"TUG 54","lat":51.312187,"lon":4.320592,"sog":0,"cog":347.7,"hdg":156,"seen":1795766509,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205336190","name":"COLIMETALS","lat":51.254238,"lon":4.414687,"sog":0,"cog":247.2,"hdg":511,"seen":1795766675,"type":70,"dest":"","len":50,"beam":7}
+{"mmsi":"205344370","name":null,"lat":51.230087,"lon":4.393128,"sog":0.1,"cog":360,"hdg":511,"seen":1795766533,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205348590","name":"CALCIT 11","lat":51.235313,"lon":4.435162,"sog":3.9,"cog":278.7,"hdg":511,"seen":1795766667,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205353590","name":"VEREMANS","lat":51.225125,"lon":4.393008,"sog":0,"cog":360,"hdg":19,"seen":1795766640,"type":99,"dest":"2E HAVENDOK","len":26,"beam":6}
+{"mmsi":"205353690","name":"PAREL II","lat":51.223877,"lon":4.392138,"sog":0,"cog":360,"hdg":511,"seen":1795766633,"type":37,"dest":"^%MECDF","len":15,"beam":5}
+{"mmsi":"205365190","name":"URANYUM","lat":51.287737,"lon":4.341708,"sog":0,"cog":360,"hdg":511,"seen":1795766661,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205366190","name":"EVANTIA","lat":51.298912,"lon":4.29405,"sog":0,"cog":295,"hdg":511,"seen":1795766501,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205367890","name":"DE NEUS","lat":51.314688,"lon":4.318655,"sog":0,"cog":336,"hdg":333,"seen":1795766671,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205367990","name":"PAGADDER","lat":51.259165,"lon":4.352482,"sog":7.4,"cog":138.6,"hdg":511,"seen":1795766522,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205371690","name":"HEEN EN WEER 3","lat":51.083343,"lon":4.365912,"sog":2.9,"cog":140.7,"hdg":511,"seen":1795766675,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205377790","name":"ASSI","lat":51.267847,"lon":4.261443,"sog":0,"cog":360,"hdg":511,"seen":1795766676,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205379190","name":null,"lat":51.22758,"lon":4.399907,"sog":0,"cog":360,"hdg":511,"seen":1795766503,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205384190","name":"ALASKA","lat":51.251542,"lon":4.361233,"sog":0,"cog":166.9,"hdg":511,"seen":1795766470,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205391690","name":"SPLENDOR","lat":51.27928,"lon":4.369248,"sog":0,"cog":90.6,"hdg":511,"seen":1795766677,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205391890","name":"FLUVIUS","lat":51.241808,"lon":4.417062,"sog":0,"cog":141,"hdg":511,"seen":1795766644,"type":79,"dest":"STRAATSBURGDOK","len":85,"beam":8}
+{"mmsi":"205397290","name":"INTEGRITY","lat":51.299357,"lon":4.326807,"sog":8.6,"cog":152.9,"hdg":511,"seen":1795766663,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205403690","name":"WATERTRUCK XI","lat":51.060342,"lon":4.431822,"sog":0,"cog":360,"hdg":511,"seen":1795766654,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205413230","name":null,"lat":51.233787,"lon":4.414575,"sog":0,"cog":0,"hdg":511,"seen":1795766502,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205427190","name":"DW 1","lat":51.250702,"lon":4.390578,"sog":0,"cog":9.7,"hdg":511,"seen":1795766589,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205436290","name":"YANKEE","lat":51.26648,"lon":4.34655,"sog":6,"cog":319.9,"hdg":321,"seen":1795766677,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205437190","name":"SPN-19","lat":51.249352,"lon":4.306938,"sog":0.1,"cog":360,"hdg":511,"seen":1795766596,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205447290","name":"EVANNA","lat":51.228983,"lon":4.406052,"sog":0,"cog":27.3,"hdg":266,"seen":1795766432,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205452690","name":"SINJOOR","lat":51.246123,"lon":4.36906,"sog":0,"cog":116.3,"hdg":511,"seen":1795766471,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205452990","name":"PARAGUAY_","lat":51.06839,"lon":4.365057,"sog":3.9,"cog":3.8,"hdg":511,"seen":1795766568,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205473190","name":"ZAMBEZI","lat":50.929497,"lon":4.680668,"sog":0,"cog":360,"hdg":511,"seen":1795766564,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205473690","name":"KAYAK 3","lat":51.235648,"lon":4.419535,"sog":0,"cog":360,"hdg":511,"seen":1795766577,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205479090","name":"CLEMA","lat":51.31623,"lon":4.27593,"sog":0.1,"cog":360,"hdg":175,"seen":1795766552,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205484790","name":"DEN DUVEL","lat":51.314955,"lon":4.31852,"sog":0,"cog":21.3,"hdg":153,"seen":1795766665,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205500990","name":"ZAMBEZI","lat":51.262835,"lon":4.328685,"sog":0,"cog":323.7,"hdg":511,"seen":1795766519,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205505790","name":"EUROPORTS","lat":51.316598,"lon":4.317892,"sog":0,"cog":349.3,"hdg":335,"seen":1795766509,"type":79,"dest":"ANTWERPEN","len":134,"beam":16}
+{"mmsi":"205514990","name":"MAC 4 .","lat":51.255142,"lon":4.379402,"sog":0,"cog":0,"hdg":511,"seen":1795766394,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205517490","name":"DEN BULT","lat":51.315022,"lon":4.318418,"sog":0,"cog":124.3,"hdg":141,"seen":1795766462,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205521190","name":"BRABO 4 B","lat":51.296518,"lon":4.28637,"sog":0,"cog":360,"hdg":511,"seen":1795766555,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205521790","name":"ANTIBES","lat":51.268837,"lon":4.359662,"sog":0,"cog":0,"hdg":511,"seen":1795766505,"type":89,"dest":"AMSTERDAM AFRIKAHAVE","len":135,"beam":15}
+{"mmsi":"205521890","name":"MANON","lat":51.199837,"lon":4.355815,"sog":0.2,"cog":189.8,"hdg":511,"seen":1795766551,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205525170","name":null,"lat":51.232583,"lon":4.394788,"sog":0,"cog":360,"hdg":511,"seen":1795766591,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205525190","name":"PIETER BRUEGEL","lat":51.223533,"lon":4.392248,"sog":0,"cog":221.1,"hdg":511,"seen":1795766602,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205530090","name":"AGAAT 8","lat":51.241798,"lon":4.417042,"sog":0.1,"cog":360,"hdg":511,"seen":1795766513,"type":99,"dest":"ANTWERPEN","len":23,"beam":4}
+{"mmsi":"205530490","name":"ECHO","lat":51.313637,"lon":4.31929,"sog":0,"cog":0,"hdg":511,"seen":1795766587,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205533690","name":"CASA NOVA","lat":51.17912,"lon":4.328528,"sog":9.3,"cog":1.1,"hdg":2,"seen":1795766616,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205534790","name":"LORCA","lat":51.240465,"lon":4.449578,"sog":0,"cog":360,"hdg":511,"seen":1795766672,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205535390","name":"WAPPER","lat":51.2556,"lon":4.380803,"sog":0,"cog":360,"hdg":511,"seen":1795766637,"type":89,"dest":"","len":86,"beam":12}
+{"mmsi":"205537690","name":"AMBER","lat":51.05255,"lon":4.361952,"sog":0,"cog":360,"hdg":511,"seen":1795766650,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205542590","name":"MALIA","lat":51.270267,"lon":4.364317,"sog":0,"cog":309.1,"hdg":511,"seen":1795766440,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205543790","name":"MARBELLA","lat":51.26811,"lon":4.360855,"sog":0,"cog":360,"hdg":511,"seen":1795766542,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205544290","name":"ANCOLIA","lat":51.278347,"lon":4.350647,"sog":0,"cog":360,"hdg":511,"seen":1795766443,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205544990","name":"ATHENA","lat":51.274098,"lon":4.332873,"sog":1.5,"cog":233,"hdg":511,"seen":1795766657,"type":20,"dest":"","len":64,"beam":8}
+{"mmsi":"205547890","name":"NANAJESA","lat":51.079442,"lon":4.367007,"sog":0,"cog":360,"hdg":511,"seen":1795766617,"type":37,"dest":"","len":27,"beam":6}
+{"mmsi":"205548290","name":"DAHLIA","lat":51.25301,"lon":4.40456,"sog":0,"cog":48.6,"hdg":511,"seen":1795766668,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205550990","name":"VALOROSO","lat":51.04904,"lon":4.435648,"sog":0,"cog":360,"hdg":511,"seen":1795766500,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205551370","name":"L'INVERNO","lat":51.07504,"lon":4.365768,"sog":0,"cog":51.2,"hdg":511,"seen":1795766527,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205562170","name":null,"lat":51.233163,"lon":4.414785,"sog":0,"cog":360,"hdg":511,"seen":1795766610,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205563190","name":"ACHILLES","lat":51.236263,"lon":4.410723,"sog":0,"cog":360,"hdg":511,"seen":1795766621,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205563990","name":"KASTAAR","lat":51.29367,"lon":4.336547,"sog":0,"cog":360,"hdg":511,"seen":1795766518,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205566190","name":"RIVER DRONE 10","lat":51.07343,"lon":4.366057,"sog":0,"cog":24.8,"hdg":1,"seen":1795766662,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205572390","name":"AQUA PEARL","lat":51.268007,"lon":4.299185,"sog":3.7,"cog":34.8,"hdg":46,"seen":1795766646,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205572490","name":"AQUA JADE","lat":51.224575,"lon":4.397172,"sog":1.1,"cog":320.6,"hdg":17,"seen":1795766506,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205572590","name":"AQUA EMERALD","lat":51.298265,"lon":4.285027,"sog":4.7,"cog":181.3,"hdg":159,"seen":1795766566,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205572690","name":"AQUA DIAMOND","lat":51.148478,"lon":4.328733,"sog":11.3,"cog":359.9,"hdg":359,"seen":1795766554,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205575200","name":"NOOR-AL-MAYA","lat":51.229068,"lon":4.410483,"sog":0,"cog":360,"hdg":511,"seen":1795766541,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205576390","name":"LUGANO","lat":51.261555,"lon":4.367735,"sog":0,"cog":360,"hdg":269,"seen":1795766577,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205576400","name":null,"lat":51.22865,"lon":4.40835,"sog":0,"cog":360,"hdg":511,"seen":1795766464,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205576790","name":"SCHELDEDAM","lat":51.255322,"lon":4.41393,"sog":0,"cog":360,"hdg":511,"seen":1795766585,"type":79,"dest":"AARTSELAAR","len":80,"beam":10}
+{"mmsi":"205582990","name":null,"lat":51.228345,"lon":4.406107,"sog":0.1,"cog":360,"hdg":511,"seen":1795766520,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205587370","name":null,"lat":51.230163,"lon":4.392635,"sog":0,"cog":360,"hdg":511,"seen":1795766536,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205590300","name":"EDLY","lat":51.232715,"lon":4.41483,"sog":0,"cog":100.5,"hdg":511,"seen":1795766598,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205595070","name":null,"lat":51.229087,"lon":4.408823,"sog":0,"cog":360,"hdg":511,"seen":1795766645,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205595090","name":"RIVERFORD","lat":51.298718,"lon":4.332253,"sog":0,"cog":177.7,"hdg":152,"seen":1795766391,"type":80,"dest":"ANTWERPEN INSTEEKDOK","len":135,"beam":18}
+{"mmsi":"205596290","name":"DEWATERBUS 11","lat":51.249885,"lon":4.310543,"sog":0,"cog":204,"hdg":280,"seen":1795766528,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205596390","name":"DEWATERBUS 12","lat":51.205407,"lon":4.368705,"sog":10.4,"cog":241,"hdg":240,"seen":1795766657,"type":69,"dest":"","len":34,"beam":8}
+{"mmsi":"205625000","name":"TUG 40","lat":51.252803,"lon":4.355987,"sog":0,"cog":189.8,"hdg":237,"seen":1795766578,"type":52,"dest":"ANTWERPEN","len":32,"beam":12}
+{"mmsi":"205628000","name":"TUG 43","lat":51.311212,"lon":4.321672,"sog":0,"cog":191.1,"hdg":332,"seen":1795766614,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205647000","name":"PIERRE PETIT SURVEY","lat":51.2898,"lon":4.318227,"sog":14.8,"cog":316.9,"hdg":314,"seen":1795766476,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205665000","name":"ZEEASTER","lat":51.224692,"lon":4.392632,"sog":0,"cog":355.3,"hdg":26,"seen":1795766438,"type":50,"dest":"","len":15,"beam":4}
+{"mmsi":"205682020","name":"NEPTUNUS","lat":51.228737,"lon":4.408807,"sog":0,"cog":255.5,"hdg":511,"seen":1795766408,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205697770","name":null,"lat":51.230923,"lon":4.393503,"sog":0,"cog":360,"hdg":511,"seen":1795766571,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205708000","name":"SCHELDT RIVER","lat":51.255878,"lon":4.30252,"sog":14.5,"cog":316.8,"hdg":322,"seen":1795766585,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205710410","name":"FLORENCE","lat":51.236287,"lon":4.414708,"sog":0,"cog":360,"hdg":511,"seen":1795766679,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205739000","name":"HENRY DE VOS","lat":51.22469,"lon":4.392693,"sog":0,"cog":247.8,"hdg":21,"seen":1795766635,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205766000","name":"VB SEINE","lat":51.296462,"lon":4.286787,"sog":0,"cog":206.3,"hdg":292,"seen":1795766429,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205770710","name":"CHANI","lat":51.232463,"lon":4.415273,"sog":0,"cog":360,"hdg":511,"seen":1795766392,"type":99,"dest":"ANTWERPEN","len":12,"beam":4}
+{"mmsi":"205849710","name":null,"lat":51.233153,"lon":4.41538,"sog":0,"cog":360,"hdg":511,"seen":1795766394,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"205978810","name":null,"lat":51.23492,"lon":4.415333,"sog":0,"cog":119.3,"hdg":511,"seen":1795766496,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"209217000","name":"OTELLO","lat":51.27883,"lon":4.339678,"sog":0,"cog":355.5,"hdg":5,"seen":1795766612,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"211159340","name":"EILTANK 44","lat":51.30171,"lon":4.323622,"sog":0,"cog":360,"hdg":154,"seen":1795766463,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"211268380","name":"OTHELLO","lat":51.303315,"lon":4.33153,"sog":0,"cog":360,"hdg":511,"seen":1795766497,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"211285050","name":"MAIN","lat":51.24232,"lon":4.448258,"sog":0,"cog":46,"hdg":338,"seen":1795766676,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"211285490","name":"BRINJAL","lat":51.273442,"lon":4.343652,"sog":2,"cog":59.5,"hdg":511,"seen":1795766524,"type":80,"dest":"ANTWERPEN SEATANK 3","len":110,"beam":16}
+{"mmsi":"211474450","name":"SCHLOSSFONTAINEBLEAU","lat":51.249498,"lon":4.39315,"sog":0,"cog":51.7,"hdg":511,"seen":1795766554,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"211511860","name":"AVISO II","lat":51.298703,"lon":4.294457,"sog":0,"cog":360,"hdg":114,"seen":1795766482,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"211514040","name":"VERONA","lat":51.246245,"lon":4.370723,"sog":0,"cog":360,"hdg":511,"seen":1795766596,"type":99,"dest":"","len":110,"beam":11}
+{"mmsi":"211541290","name":"SCHLOSS HEIDELBERG","lat":51.251065,"lon":4.347678,"sog":1.8,"cog":150,"hdg":132,"seen":1795766625,"type":80,"dest":"ESSO BELGIUM ANTWERP","len":110,"beam":12}
+{"mmsi":"219053000","name":"VOLGA MAERSK","lat":51.294083,"lon":4.266517,"sog":0,"cog":16.1,"hdg":34,"seen":1795766655,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"226000510","name":"CONNEMARA","lat":51.075925,"lon":4.396305,"sog":6.9,"cog":303.1,"hdg":511,"seen":1795766640,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"226017210","name":"VOLNAY","lat":51.239862,"lon":4.478807,"sog":0,"cog":360,"hdg":261,"seen":1795766665,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"226017290","name":"MOVIMENTO","lat":51.090925,"lon":4.34143,"sog":0,"cog":278.2,"hdg":511,"seen":1795766394,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"227081710","name":"DELTA","lat":51.242078,"lon":4.448547,"sog":0,"cog":0,"hdg":511,"seen":1795766640,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"227096370","name":"EUROPA","lat":51.239602,"lon":4.472798,"sog":6.1,"cog":85.3,"hdg":511,"seen":1795766500,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"229632000","name":"CIELO DI GAETA","lat":51.271888,"lon":4.355602,"sog":0,"cog":162.5,"hdg":124,"seen":1795766478,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"231075000","name":"HAV SUND","lat":51.252645,"lon":4.361767,"sog":0,"cog":282.8,"hdg":197,"seen":1795766447,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"235105625","name":"LIAM-P","lat":51.221203,"lon":4.39545,"sog":0,"cog":0,"hdg":511,"seen":1795766654,"type":31,"dest":"ANTWERPEN","len":24,"beam":7}
+{"mmsi":"244001092","name":"YINTHE","lat":51.245938,"lon":4.380342,"sog":0,"cog":360,"hdg":511,"seen":1795766663,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244004022","name":"CITO","lat":51.270708,"lon":4.355088,"sog":0,"cog":360,"hdg":126,"seen":1795766554,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244004161","name":"CORPORATION","lat":51.2484,"lon":4.392432,"sog":0,"cog":0,"hdg":511,"seen":1795766396,"type":80,"dest":"6E HAVENDOK 300 ANTW","len":110,"beam":12}
+{"mmsi":"244004871","name":"CRESCENDO","lat":51.316843,"lon":4.306827,"sog":0,"cog":360,"hdg":44,"seen":1795766395,"type":80,"dest":"GENT KLUIZENDOK  DOU","len":135,"beam":18}
+{"mmsi":"244010776","name":"MARTENS 15","lat":51.250798,"lon":4.360843,"sog":0,"cog":360,"hdg":511,"seen":1795766395,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244014405","name":"PHILIPSKERCKE II","lat":51.276742,"lon":4.33405,"sog":0,"cog":321.5,"hdg":317,"seen":1795766610,"type":79,"dest":"WESTERSCHELDE  PAS V","len":86,"beam":12}
+{"mmsi":"244030190","name":"VAER-WEL","lat":51.22885,"lon":4.407527,"sog":0,"cog":360,"hdg":511,"seen":1795766628,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244030633","name":"NEWFORD","lat":51.299932,"lon":4.290442,"sog":0,"cog":360,"hdg":511,"seen":1795766512,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244033335","name":"ANASTACIA","lat":51.261565,"lon":4.365768,"sog":0,"cog":10.5,"hdg":271,"seen":1795766399,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244041794","name":"VELOMA","lat":51.268643,"lon":4.344892,"sog":0,"cog":360,"hdg":511,"seen":1795766556,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244055798","name":"ZUDERSEE","lat":51.257698,"lon":4.36243,"sog":0,"cog":360,"hdg":511,"seen":1795766629,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244060919","name":null,"lat":51.228372,"lon":4.406677,"sog":0,"cog":360,"hdg":511,"seen":1795766415,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244076547","name":"POUWEL S","lat":51.270853,"lon":4.363285,"sog":0,"cog":43.3,"hdg":511,"seen":1795766414,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244086794","name":"FLAG ALPHA","lat":51.252932,"lon":4.350948,"sog":0,"cog":15.6,"hdg":511,"seen":1795766485,"type":0,"dest":"","len":0,"beam":0}
+{"mmsi":"244140886","name":"SINJOOR","lat":51.246865,"lon":4.35267,"sog":0,"cog":333,"hdg":511,"seen":1795766478,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244150380","name":"GRIEND","lat":51.25745,"lon":4.360203,"sog":0,"cog":360,"hdg":511,"seen":1795766623,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244373443","name":"Z9","lat":51.237597,"lon":4.419185,"sog":0.2,"cog":40,"hdg":7,"seen":1795766600,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244377355","name":null,"lat":51.231408,"lon":4.392673,"sog":0,"cog":360,"hdg":511,"seen":1795766636,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244393450","name":"AT LAST","lat":51.228632,"lon":4.40771,"sog":0,"cog":360,"hdg":511,"seen":1795766604,"type":37,"dest":"ANTWERPEN STADSHAVE","len":20,"beam":6}
+{"mmsi":"244499744","name":"MULTRATUG 4","lat":51.25643,"lon":4.360033,"sog":0,"cog":186.5,"hdg":511,"seen":1795766396,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244620740","name":"VOLENDAM","lat":51.314952,"lon":4.30526,"sog":0,"cog":278.7,"hdg":338,"seen":1795766553,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244620904","name":"SANNE","lat":51.243918,"lon":4.337045,"sog":0.1,"cog":157.2,"hdg":511,"seen":1795766665,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244630035","name":"AQUA-MYRA","lat":51.281633,"lon":4.34318,"sog":7.1,"cog":334.9,"hdg":333,"seen":1795766598,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244630814","name":"HOUSTON","lat":51.261208,"lon":4.336948,"sog":0,"cog":360,"hdg":511,"seen":1795766679,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244630907","name":"EBEN","lat":51.259893,"lon":4.390298,"sog":0,"cog":360,"hdg":511,"seen":1795766609,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244650012","name":"ADRIE-S","lat":51.212498,"lon":4.582933,"sog":7.7,"cog":297,"hdg":298,"seen":1795766594,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244650144","name":"PHILIPSKERCKE","lat":51.238108,"lon":4.418807,"sog":0,"cog":360,"hdg":511,"seen":1795766500,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244650822","name":"INSOMNIA","lat":51.207378,"lon":4.379282,"sog":10.7,"cog":55.1,"hdg":511,"seen":1795766676,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244650962","name":"EENDRACHT","lat":51.09028,"lon":4.342685,"sog":0,"cog":305.2,"hdg":511,"seen":1795766534,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244650993","name":"EENHOORN","lat":51.248588,"lon":4.375407,"sog":0,"cog":33.8,"hdg":511,"seen":1795766462,"type":80,"dest":"INSTEEKHAVEN 3E PETR","len":111,"beam":12}
+{"mmsi":"244660019","name":"DE DUBBEL","lat":51.236035,"lon":4.44579,"sog":0,"cog":249.4,"hdg":511,"seen":1795766435,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244660172","name":"HERMANNA","lat":51.268155,"lon":4.331668,"sog":0,"cog":0.3,"hdg":511,"seen":1795766675,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244660181","name":"ALM","lat":51.23972,"lon":4.450097,"sog":0,"cog":173.5,"hdg":338,"seen":1795766664,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244660524","name":"CATHARINAPLAAT","lat":51.23586,"lon":4.418297,"sog":0,"cog":360,"hdg":511,"seen":1795766658,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244660534","name":"JULIA","lat":51.247305,"lon":4.351912,"sog":0,"cog":360,"hdg":511,"seen":1795766625,"type":99,"dest":"ANTWERP","len":62,"beam":8}
+{"mmsi":"244660555","name":"MENAPIER","lat":51.299753,"lon":4.291138,"sog":0,"cog":85.9,"hdg":511,"seen":1795766470,"type":90,"dest":"ANTWERPEN BEVRIJDING","len":110,"beam":12}
+{"mmsi":"244660638","name":"VLAKE","lat":51.25504,"lon":4.414677,"sog":0,"cog":360,"hdg":511,"seen":1795766671,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244660836","name":"UNITY","lat":51.278067,"lon":4.332517,"sog":0,"cog":264.5,"hdg":511,"seen":1795766419,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244660979","name":"ANNIE III","lat":51.222357,"lon":4.396292,"sog":0,"cog":360,"hdg":511,"seen":1795766583,"type":31,"dest":"ANTWERPEN","len":22,"beam":6}
+{"mmsi":"244670295","name":"ROMEE","lat":51.298045,"lon":4.327615,"sog":9,"cog":152.9,"hdg":511,"seen":1795766418,"type":99,"dest":"RDAM<->BOZ","len":84,"beam":9}
+{"mmsi":"244670340","name":"VIPER","lat":51.245982,"lon":4.383662,"sog":0,"cog":0,"hdg":511,"seen":1795766580,"type":20,"dest":"MARKELOXXWXX","len":110,"beam":10}
+{"mmsi":"244670478","name":"RUMARDO","lat":51.253715,"lon":4.413375,"sog":0,"cog":258.9,"hdg":511,"seen":1795766652,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244670658","name":"MI-DESEO","lat":51.261575,"lon":4.360798,"sog":0,"cog":6,"hdg":270,"seen":1795766578,"type":80,"dest":"ANTWERPEN","len":135,"beam":14}
+{"mmsi":"244690078","name":"OLYMPIC","lat":51.235382,"lon":4.434017,"sog":0.8,"cog":318.2,"hdg":511,"seen":1795766472,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244690229","name":"SPECTRE","lat":51.248507,"lon":4.389948,"sog":0,"cog":360,"hdg":25,"seen":1795766611,"type":80,"dest":"ANTWERPEN","len":110,"beam":13}
+{"mmsi":"244690297","name":"GIBEON","lat":51.285993,"lon":4.343152,"sog":0,"cog":360,"hdg":511,"seen":1795766554,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244690695","name":"ACHILLES","lat":51.240295,"lon":4.479945,"sog":5.2,"cog":79.9,"hdg":82,"seen":1795766474,"type":80,"dest":"WANDRE  PETROLEUM PR","len":110,"beam":12}
+{"mmsi":"244700010","name":"TYGO","lat":51.242185,"lon":4.44803,"sog":0,"cog":326.1,"hdg":511,"seen":1795766663,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244700232","name":"BO NOLA","lat":51.309133,"lon":4.32334,"sog":0,"cog":360,"hdg":511,"seen":1795766656,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244700448","name":"NJORD","lat":51.249193,"lon":4.38916,"sog":0,"cog":360,"hdg":511,"seen":1795766638,"type":0,"dest":"ANTWERPEN","len":105,"beam":23}
+{"mmsi":"244700697","name":"AVELIE","lat":51.238797,"lon":4.496745,"sog":6,"cog":105.5,"hdg":511,"seen":1795766601,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244700786","name":"SOMTRANS XXI","lat":51.300402,"lon":4.324793,"sog":0,"cog":360,"hdg":511,"seen":1795766583,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244710348","name":"PROGRESSO","lat":51.309155,"lon":4.320558,"sog":7.6,"cog":336.5,"hdg":511,"seen":1795766483,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244730862","name":"DEO CONFIDENTES","lat":51.312347,"lon":4.276552,"sog":0,"cog":360,"hdg":511,"seen":1795766642,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244750486","name":"AUWE NEEL","lat":51.229658,"lon":4.405895,"sog":0,"cog":360,"hdg":511,"seen":1795766596,"type":69,"dest":"MARKERMEER","len":27,"beam":6}
+{"mmsi":"244750922","name":"SOMTRANS XXXIII","lat":51.296513,"lon":4.268713,"sog":0,"cog":360,"hdg":511,"seen":1795766603,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244770272","name":"MIMOSA","lat":51.303308,"lon":4.28008,"sog":9.3,"cog":321.5,"hdg":511,"seen":1795766551,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"244870902","name":"EQUILIBRE","lat":51.228828,"lon":4.4061,"sog":0,"cog":360,"hdg":511,"seen":1795766497,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"245314000","name":"STENA FREIGHTER","lat":51.251612,"lon":4.355592,"sog":0,"cog":2,"hdg":237,"seen":1795766590,"type":70,"dest":"BEANR","len":184,"beam":26}
+{"mmsi":"246211000","name":"CONDOR","lat":51.119998,"lon":4.30445,"sog":0,"cog":338.8,"hdg":7,"seen":1795766648,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"247405800","name":"GRANDE MIRAFIORI","lat":51.279373,"lon":4.376502,"sog":0,"cog":26.9,"hdg":88,"seen":1795766516,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"249223000","name":"CGAS JAGUAR","lat":51.253083,"lon":4.3679,"sog":0,"cog":91,"hdg":91,"seen":1795766468,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"249346000","name":"NAVARINO","lat":51.2906,"lon":4.256033,"sog":0,"cog":197,"hdg":32,"seen":1795766583,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"253242332","name":"NEPTUNUS","lat":51.27707,"lon":4.334203,"sog":0,"cog":360,"hdg":511,"seen":1795766639,"type":80,"dest":"BRUXELLES AVANTPORT","len":125,"beam":12}
+{"mmsi":"255801000","name":"UAL MANITOBA","lat":51.25756,"lon":4.353223,"sog":0,"cog":314.1,"hdg":328,"seen":1795766557,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"255806192","name":"AGNES ESSBERGER","lat":51.253598,"lon":4.378483,"sog":0,"cog":87.5,"hdg":90,"seen":1795766634,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"255806258","name":"MSC VIOLETTA II","lat":51.295967,"lon":4.261823,"sog":0,"cog":302.3,"hdg":32,"seen":1795766426,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"255806303","name":"ANNETTE ESSBERGER","lat":51.266597,"lon":4.369137,"sog":0,"cog":81.1,"hdg":270,"seen":1795766419,"type":83,"dest":"NL RTM>BE ANR","len":127,"beam":19}
+{"mmsi":"255915649","name":"SONGA ORION","lat":51.271017,"lon":4.356242,"sog":0,"cog":304.7,"hdg":125,"seen":1795766516,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"255915662","name":"PANDA 003","lat":51.259745,"lon":4.402495,"sog":0,"cog":10.5,"hdg":271,"seen":1795766496,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"255915932","name":"VERTOM EVA","lat":51.279153,"lon":4.359397,"sog":0,"cog":278.1,"hdg":91,"seen":1795766561,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"255917318","name":"URSULA ESSBERGER","lat":51.258763,"lon":4.360142,"sog":0,"cog":181.4,"hdg":181,"seen":1795766676,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"256996000","name":"W WEST","lat":51.319313,"lon":4.30853,"sog":0,"cog":38.1,"hdg":225,"seen":1795766550,"type":80,"dest":"BEANR","len":101,"beam":19}
+{"mmsi":"264163270","name":"DANIMEX 2","lat":51.265183,"lon":4.287457,"sog":0.1,"cog":191.4,"hdg":511,"seen":1795766410,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"269057072","name":"ORANJE NASSAU IV","lat":51.288753,"lon":4.334633,"sog":0,"cog":161.9,"hdg":511,"seen":1795766510,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"314019000","name":"WILSON ALSTER","lat":51.25905,"lon":4.395598,"sog":0,"cog":323.9,"hdg":151,"seen":1795766600,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"354415000","name":"MSC FABIENNE","lat":51.301177,"lon":4.267008,"sog":0,"cog":32.7,"hdg":32,"seen":1795766496,"type":71,"dest":"BEANR","len":294,"beam":32}
+{"mmsi":"354833000","name":"ORIENTAL VIOLA","lat":51.277748,"lon":4.332805,"sog":0,"cog":323,"hdg":318,"seen":1795766598,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"538004642","name":"FEDERAL SATSUKI","lat":51.284745,"lon":4.344093,"sog":0,"cog":26.2,"hdg":152,"seen":1795766471,"type":70,"dest":"BEANR","len":200,"beam":23}
+{"mmsi":"538005865","name":"ARDMORE CHEROKEE","lat":51.289175,"lon":4.339497,"sog":0,"cog":271.5,"hdg":153,"seen":1795766411,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"605086013","name":"SEDRATA","lat":51.25562,"lon":4.398618,"sog":0,"cog":60.9,"hdg":331,"seen":1795766679,"type":70,"dest":"BE-ANR","len":120,"beam":21}
+{"mmsi":"636014945","name":"AL YASAT-II","lat":51.246367,"lon":4.363377,"sog":0.1,"cog":357,"hdg":92,"seen":1795766397,"type":null,"dest":null,"len":null,"beam":null}
+{"mmsi":"636024513","name":"MSC VIOLA","lat":51.286717,"lon":4.252408,"sog":0,"cog":128.4,"hdg":31,"seen":1795766598,"type":71,"dest":"BEANR","len":366,"beam":51}
